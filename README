@@ -1,0 +1,14 @@
+mcMMOIRC is a Bukkit plugin to integrate the mcMMO chat with CraftIRC.
+
+Currently, only admin chat is supported.
+
+commands:
+  /mcmmoirc reload:
+    mcMMOIRC main command
+    
+    aliases:
+        mirc
+
+permissions:
+    mcmmoirc.reload:
+        Reload mcMMOIRC
