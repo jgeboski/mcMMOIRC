@@ -92,8 +92,6 @@ public class mcMMOIRC extends JavaPlugin
         getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
         
         events.register();
-        
-        Log.info("%s enabled", getDescription().getVersion());
     }
     
     public void onDisable()
@@ -102,8 +100,6 @@ public class mcMMOIRC extends JavaPlugin
         
         command = getServer().getPluginCommand("a");
         command.setExecutor(mexecutor);
-        
-        Log.info("%s disabled", getDescription().getVersion());
     }
     
     public void reload()
