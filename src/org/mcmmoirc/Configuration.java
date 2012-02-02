@@ -30,6 +30,8 @@ public class Configuration extends YamlConfiguration
     public Configuration(File file)
     {
         this.file = file;
+        
+        tag = new String();
     }
     
     public void load()
@@ -40,7 +42,7 @@ public class Configuration extends YamlConfiguration
             Log.warning("Unable to load: %s", file.toString());
         }
         
-        tag = getString("tag", new String());
+        tag = getString("tag", tag);
         
         if(!file.exists())
             save();
