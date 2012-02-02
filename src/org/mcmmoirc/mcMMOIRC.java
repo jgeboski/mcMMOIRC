@@ -26,8 +26,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event.Priority;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -49,13 +47,14 @@ public class mcMMOIRC extends JavaPlugin
     public CraftIRC craftirc;
     public CommandExecutor mexecutor;
     public MEndPoint mendpoint;
-    public MPlayerListener plistener;
+    
+    private EventListener events;
     
     public void onLoad()
     {
         config    = new Configuration(new File(getDataFolder(), "config.yml"));
+        events    = new EventListener(this);
         mendpoint = new MEndPoint(this);
-        plistener = new MPlayerListener(this);
     }
     
     public void onEnable()
@@ -92,7 +91,7 @@ public class mcMMOIRC extends JavaPlugin
         command.setExecutor(new CA(this));
         getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
         
-        pm.registerEvent(Type.PLAYER_CHAT, plistener, Priority.Normal, this);
+        events.register();
         
         Log.info("%s enabled", getDescription().getVersion());
     }

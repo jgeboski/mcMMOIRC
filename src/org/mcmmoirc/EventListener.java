@@ -19,21 +19,32 @@ package org.mcmmoirc;;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerListener;
+import org.bukkit.plugin.PluginManager;
 
 import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.Users;
 
-public class MPlayerListener extends PlayerListener
+public class EventListener implements Listener
 {
     public mcMMOIRC mirc;
     
-    public MPlayerListener(mcMMOIRC mirc)
+    public EventListener(mcMMOIRC mirc)
     {
         this.mirc = mirc;
     }
     
+    public void register()
+    {
+        PluginManager pm;
+        
+        pm = mirc.getServer().getPluginManager();
+        pm.registerEvents(this, mirc);
+    }
+    
+    @EventHandler
     public void onPlayerChat(PlayerChatEvent event)
     {
         PlayerProfile pp;
