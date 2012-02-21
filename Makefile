@@ -1,30 +1,52 @@
 PLUGIN=mcMMOIRC
+OUT=$(PLUGIN).jar
+
+JC=javac
+JFLAGS=-g
+
+JAR=jar
+MKDIR=mkdir
+RM=rm
+WGET=wget
+
 CWD=$(shell pwd)
+
 SRC=src
-DEPS=.deps
-OBJS=.objs
+DEP=.dep
 
-JAR=$(CWD)/$(PLUGIN).jar
+.SUFFIXES: .java .class
 
-SRCS=$(shell find $(SRC) -type f -name *.java -printf "%h/%f ")
-JDEPS=$(shell find $(DEPS) -type f -printf "%h/%f:")
+SRCS=\
+  $(SRC)/org/mcmmoirc/Configuration.java \
+  $(SRC)/org/mcmmoirc/Log.java \
+  $(SRC)/org/mcmmoirc/Message.java \
+  $(SRC)/org/mcmmoirc/MEndPoint.java \
+  $(SRC)/org/mcmmoirc/EventListener.java \
+  $(SRC)/org/mcmmoirc/mcMMOIRC.java \
+  $(SRC)/org/mcmmoirc/command/CA.java \
+  $(SRC)/org/mcmmoirc/command/CmcMMOIRC.java
 
-all: deps objs jar
+DEPS=$(DEP)/bukkit.jar:$(DEP)/CraftIRC.jar:$(DEP)/mcMMO.jar:$(SRC)
+OBJS=$(SRCS:.java=.class)
 
-jar:
-	rm -f $(JAR)
-	jar cvf $(JAR) -C $(OBJS) .
+all: $(OUT)
 
-objs:
-	rm -rf $(OBJS)
-	mkdir -p $(OBJS)
-	cp $(SRC)/plugin.yml $(OBJS)
-	javac -cp $(JDEPS) -d $(OBJS) -g $(SRCS)
+$(OUT): objs
+	$(JAR) cf $(OUT) -C $(SRC) plugin.yml $(OBJS)
+
+objs: $(OBJS)
+
+%.class: %.java
+	$(JC) -classpath $(DEPS) -sourcepath $(SRC) $(JFLAGS) $<
 
 deps:
-	rm -rf $(DEPS)
-	mkdir -p $(DEPS)
+	$(RM)    -rf $(DEP)
+	$(MKDIR) -p  $(DEP)
 	
-	wget -O $(DEPS)/CraftBukkit.jar      http://ci.bukkit.org/job/dev-CraftBukkit/1846/artifact/target/craftbukkit-1.1-R3.jar
-	wget -O $(DEPS)/CraftIRC-55.jar      http://ensifera.com:8080/job/CraftIRC%203/55/com.ensifera\$$CraftIRC/artifact/com.ensifera/CraftIRC/3.0.0-SNAPSHOT/CraftIRC-3.0.0-SNAPSHOT.jar
-	wget -O $(DEPS)/mcMMO-1.2.08-dev.jar http://dev.bukkit.org/media/files/566/904/mcMMO.jar
+	$(WGET) -O $(DEP)/bukkit.jar   http://ci.bukkit.org/job/dev-Bukkit/1211/artifact/target/bukkit-1.1-R3.jar
+	$(WGET) -O $(DEP)/CraftIRC.jar http://dl.phozop.net/CraftIRC/v3/CraftIRC.jar
+	$(WGET) -O $(DEP)/mcMMO.jar    http://dev.bukkit.org/media/files/574/155/mcMMO.jar
+
+clean:
+	$(RM) -f $(OBJS) $(OUT)
+
