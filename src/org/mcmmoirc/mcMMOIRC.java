@@ -183,7 +183,8 @@ public class mcMMOIRC extends JavaPlugin
     /**
      * Send a message to the admin channel in Minecraft
      * 
-     * @param msg  A string containing a message
+     * @param sender  The message sender
+     * @param msg     A string containing a message
      **/
     public void adminMessageToGame(String sender, String smsg)
     {
@@ -193,6 +194,51 @@ public class mcMMOIRC extends JavaPlugin
         msg = String.format("%s{%s%s%s} %s",
             ChatColor.AQUA, ChatColor.DARK_PURPLE,
             sender, ChatColor.AQUA, smsg);
+        
+        players = getServer().getOnlinePlayers();
+        
+        for(Player player : players) {
+            if(mcPermissions.getInstance().adminChat(player) || player.isOp())
+                player.sendMessage(msg);
+        }
+    }
+    
+    /**
+     * Send a action to the admin channel in Minecraft
+     * 
+     * @param sender  The message sender
+     * @param msg     A string containing a message
+     **/
+    public void adminActionToGame(String sender, String smsg)
+    {
+        Player[] players;
+        String msg;
+        
+        msg = String.format("%s* %s%s %s",
+            ChatColor.AQUA, ChatColor.DARK_PURPLE,
+            sender, smsg);
+        
+        players = getServer().getOnlinePlayers();
+        
+        for(Player player : players) {
+            if(mcPermissions.getInstance().adminChat(player) || player.isOp())
+                player.sendMessage(msg);
+        }
+    }
+    
+    /**
+     * Send a event to the admin channel in Minecraft
+     * 
+     * @param sender  The event trigger
+     * @param msg     A string containing a message
+     **/
+    public void adminEventToGame(String sender, String event)
+    {
+        Player[] players;
+        String msg;
+        
+        msg = String.format("%s* %s%s %s",
+            ChatColor.AQUA, ChatColor.DARK_PURPLE, sender, event);
         
         players = getServer().getOnlinePlayers();
         

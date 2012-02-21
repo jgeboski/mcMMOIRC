@@ -49,4 +49,3 @@ deps:
 
 clean:
 	$(RM) -f $(OBJS) $(OUT)
-
