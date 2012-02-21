@@ -25,6 +25,6 @@ deps:
 	rm -rf $(DEPS)
 	mkdir -p $(DEPS)
 	
-	wget -O $(DEPS)/CraftBukkit.jar      http://ci.bukkit.org/job/dev-CraftBukkit/1846/artifact/target/craftbukkit-1.1-R3.jar
-	wget -O $(DEPS)/CraftIRC-55.jar      http://ensifera.com:8080/job/CraftIRC%203/55/com.ensifera\$$CraftIRC/artifact/com.ensifera/CraftIRC/3.0.0-SNAPSHOT/CraftIRC-3.0.0-SNAPSHOT.jar
-	wget -O $(DEPS)/mcMMO-1.2.08-dev.jar http://dev.bukkit.org/media/files/566/904/mcMMO.jar
+	wget -O $(DEPS)/CraftBukkit.jar      http://dl.bukkit.org/downloads/craftbukkit/get/latest-rb/craftbukkit.jar
+	wget -O $(DEPS)/CraftIRC-55.jar      http://bukget.org/api/plugin/craftirc/latest/download
+	wget -O $(DEPS)/mcMMO-1.2.08-dev.jar http://bukget.org/api/plugin/mcmmo/latest/download

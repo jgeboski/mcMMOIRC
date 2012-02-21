@@ -46,9 +46,27 @@ class MEndPoint implements EndPoint
         String msg;
         
         sender = rmsg.getField("sender");
-        smsg   = rmsg.getField("message");
         
-        mirc.adminMessageToGame(sender, smsg);
+        // Chat
+        if (rmsg.getEvent() == "chat") {
+        	mirc.adminMessageToGame(sender, rmsg.getField("message"));
+       	}
+       	// Chat
+        else if (rmsg.getEvent() == "action") {
+        	mirc.adminActionToGame(sender, rmsg.getField("message"));
+       	}
+       	// Join
+       	else if (rmsg.getEvent() == "join") {
+       		mirc.adminEventToGame(sender, "joined.");
+       	}
+       	// Part
+       	else if (rmsg.getEvent() == "part") {
+       		mirc.adminEventToGame(sender, "parted.");
+       	}
+       	// Quit
+       	else if (rmsg.getEvent() == "quit") {
+       		mirc.adminEventToGame(sender, "quit.");
+       	}
     }
     
     public boolean userMessageIn(String username, RelayedMessage msg)
