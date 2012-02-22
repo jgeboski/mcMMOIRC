@@ -40,33 +40,22 @@ class MEndPoint implements EndPoint
         return Type.MINECRAFT;
     }
     
-    public void messageIn(RelayedMessage rmsg)
+    public void messageIn(RelayedMessage msg)
     {
-        String sender, smsg;
-        String msg;
+        String sender;
         
-        sender = rmsg.getField("sender");
+        sender = msg.getField("sender");
         
-        // Chat
-        if (rmsg.getEvent() == "chat") {
-        	mirc.adminMessageToGame(sender, rmsg.getField("message"));
-       	}
-       	// Chat
-        else if (rmsg.getEvent() == "action") {
-        	mirc.adminActionToGame(sender, rmsg.getField("message"));
-       	}
-       	// Join
-       	else if (rmsg.getEvent() == "join") {
-       		mirc.adminEventToGame(sender, "joined.");
-       	}
-       	// Part
-       	else if (rmsg.getEvent() == "part") {
-       		mirc.adminEventToGame(sender, "parted.");
-       	}
-       	// Quit
-       	else if (rmsg.getEvent() == "quit") {
-       		mirc.adminEventToGame(sender, "quit.");
-       	}
+        if(msg.getEvent() == "chat")
+        	mirc.adminMessageToGame(sender, msg.getField("message"));
+        else if(msg.getEvent() == "action")
+        	mirc.adminActionToGame(sender, msg.getField("message"));
+       	else if(msg.getEvent() == "join")
+       		mirc.adminEventToGame(sender, "joined IRC.");
+       	else if(msg.getEvent() == "part")
+       		mirc.adminEventToGame(sender, "left IRC.");
+       	else if(msg.getEvent() == "quit")
+       		mirc.adminEventToGame(sender, "quit IRC.");
     }
     
     public boolean userMessageIn(String username, RelayedMessage msg)

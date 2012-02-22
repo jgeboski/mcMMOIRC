@@ -151,6 +151,24 @@ public class mcMMOIRC extends JavaPlugin
     }
     
     /**
+     * Send a message to admin chat in game
+     * 
+     * @param format  A format string
+     * @param args    Arguments corresponding to @param format
+     **/
+    public void messageAdmins(String format, Object ... args)
+    {
+        String msg;
+        
+        msg = String.format(format, args);
+        
+        for(Player player : getServer().getOnlinePlayers()) {
+            if(mcPermissions.getInstance().adminChat(player) || player.isOp())
+                player.sendMessage(msg);
+        }
+    }
+    
+    /**
      * Send a message to admin channel tag
      * 
      * @param sender  A CommandSender
@@ -173,7 +191,7 @@ public class mcMMOIRC extends JavaPlugin
             rmsg.setField("world",      player.getWorld().getName());
             rmsg.setField("realSender", player.getName());
         } else {
-            rmsg.setField("sender", sender.getName());
+            rmsg.setField("sender",     sender.getName());
         }
         
         rmsg.setField("message", msg);
@@ -181,70 +199,38 @@ public class mcMMOIRC extends JavaPlugin
     }
     
     /**
-     * Send a message to the admin channel in Minecraft
+     * Send a message to the admin channel in game
      * 
      * @param sender  The message sender
      * @param msg     A string containing a message
      **/
-    public void adminMessageToGame(String sender, String smsg)
+    public void adminMessageToGame(String sender, String msg)
     {
-        Player[] players;
-        String msg;
-        
-        msg = String.format("%s{%s%s%s} %s",
-            ChatColor.AQUA, ChatColor.DARK_PURPLE,
-            sender, ChatColor.AQUA, smsg);
-        
-        players = getServer().getOnlinePlayers();
-        
-        for(Player player : players) {
-            if(mcPermissions.getInstance().adminChat(player) || player.isOp())
-                player.sendMessage(msg);
-        }
+        messageAdmins("%s{%s%s%s} %s", ChatColor.AQUA, ChatColor.DARK_PURPLE,
+            sender, ChatColor.AQUA, msg);
     }
     
     /**
-     * Send a action to the admin channel in Minecraft
+     * Send an action to the admin channel in game
      * 
      * @param sender  The message sender
      * @param msg     A string containing a message
      **/
-    public void adminActionToGame(String sender, String smsg)
+    public void adminActionToGame(String sender, String msg)
     {
-        Player[] players;
-        String msg;
-        
-        msg = String.format("%s* %s%s %s",
-            ChatColor.AQUA, ChatColor.DARK_PURPLE,
-            sender, smsg);
-        
-        players = getServer().getOnlinePlayers();
-        
-        for(Player player : players) {
-            if(mcPermissions.getInstance().adminChat(player) || player.isOp())
-                player.sendMessage(msg);
-        }
+        messageAdmins("%s* %s%s%s %s", ChatColor.AQUA, ChatColor.DARK_PURPLE,
+            sender, ChatColor.AQUA, msg);
     }
     
     /**
-     * Send a event to the admin channel in Minecraft
+     * Send an event to the admin channel in game
      * 
      * @param sender  The event trigger
      * @param msg     A string containing a message
      **/
-    public void adminEventToGame(String sender, String event)
+    public void adminEventToGame(String sender, String msg)
     {
-        Player[] players;
-        String msg;
-        
-        msg = String.format("%s* %s%s %s",
-            ChatColor.AQUA, ChatColor.DARK_PURPLE, sender, event);
-        
-        players = getServer().getOnlinePlayers();
-        
-        for(Player player : players) {
-            if(mcPermissions.getInstance().adminChat(player) || player.isOp())
-                player.sendMessage(msg);
-        }
+        messageAdmins("%s* %s%s%s %s", ChatColor.AQUA, ChatColor.DARK_PURPLE,
+            sender, ChatColor.AQUA, msg);
     }
 }
