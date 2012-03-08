@@ -66,13 +66,6 @@ public class mcMMOIRC extends JavaPlugin
         config.load();
         
         pm     = getServer().getPluginManager();
-        plugin = pm.getPlugin("mcMMO");
-        
-        if(plugin == null) {
-            Log.severe("Unable to find mcMMO");
-            return;
-        }
-        
         plugin = pm.getPlugin("CraftIRC");
         
         if(plugin == null) {
@@ -85,8 +78,7 @@ public class mcMMOIRC extends JavaPlugin
         mexecutor = command.getExecutor();
         
         if(!craftirc.registerEndPoint(config.tag, mendpoint))
-            Log.severe("Unable to register CraftIRC tag: %s",
-                config.tag);
+            Log.severe("Unable to register CraftIRC tag: %s", config.tag);
         
         command.setExecutor(new CA(this));
         getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
@@ -109,8 +101,7 @@ public class mcMMOIRC extends JavaPlugin
         config.load();
         
         if(!craftirc.registerEndPoint(config.tag, mendpoint))
-            Log.severe("Unable to register CraftIRC tag: %s",
-                config.tag);
+            Log.severe("Unable to register CraftIRC tag: %s", config.tag);
     }
     
     /**
