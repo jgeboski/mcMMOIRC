@@ -1,0 +1,101 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                        http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.mcmmoirc</groupId>
+    <artifactId>mcMMOIRC</artifactId>
+    <packaging>jar</packaging>
+    <version>0.1.0</version>
+    <name>mcMMOIRC</name>
+    <url>https://github.com/jgeboski/mcMMOIRC/</url>
+    
+    <developers>
+        <developer>
+            <id>jgeboski</id>
+            <name>James Geboski</name>
+            <email>jgeboski@gmail.com</email>
+            <url>https://github.com/jgeboski/</url>
+            <roles>
+                <role>Author</role>
+                <role>Manager</role>
+            </roles>
+        </developer>
+    </developers>
+    
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/jgeboski/mcMMOIRC/issues/</url>
+    </issueManagement>
+    
+    <ciManagement>
+        <system>jenkins</system>
+        <url>http://ci.bitmissile.com/job/mcMMOIRC/</url>
+    </ciManagement>
+    
+    <scm>
+        <connection>
+            scm:git:https://github.com/jgeboski/mcMMOIRC.git
+        </connection>
+        <developerConnection>
+            scm:git:git@github.com:jgeboski/mcMMOIRC.git
+        </developerConnection>
+        <url>https://github.com/jgeboski/mcMMOIRC/</url>
+    </scm>
+    
+    <repositories>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.bukkit.org/content/groups/public/</url>
+        </repository>
+    </repositories>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.ensifera</groupId>
+            <artifactId>CraftIRC</artifactId>
+            <version>3.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <artifactId>mcMMO</artifactId>
+            <version>1.3.00-dev</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.2.3-R0.2-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <defaultGoal>clean package</defaultGoal>
+        <directory>${basedir}/target</directory>
+        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+        <finalName>${artifactId}</finalName>
+        
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>plugin.yml</include>
+                </includes>
+            </resource>
+        </resources>
+        
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
