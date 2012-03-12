@@ -20,6 +20,7 @@ package org.mcmmoirc;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.plugin.PluginManager;
@@ -48,14 +49,17 @@ public class EventListener implements Listener
     public void onPlayerChat(PlayerChatEvent event)
     {
         PlayerProfile pp;
-        Player player;
+        Player p;
         
-        player = event.getPlayer();
-        pp     = Users.getProfile(player);
+        p  = event.getPlayer();
+        pp = Users.getProfile(p);
         
         if(!pp.getAdminChatMode())
             return;
         
-        mirc.adminMessageToIRC(player, event.getMessage());
+        event.setCancelled(true);
+        
+        mirc.adminMessageToGame(p, "chat", event.getMessage());
+        mirc.adminMessageToIRC(p, event.getMessage());
     }
 }

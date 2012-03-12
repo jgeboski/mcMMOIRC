@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc;
+package org.mcmmoirc.point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,36 +26,16 @@ import org.bukkit.entity.Player;
 import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
-class MEndPoint implements EndPoint
+public class GamePoint implements EndPoint
 {
-    protected mcMMOIRC mirc;
-    
-    public MEndPoint(mcMMOIRC mirc)
-    {
-        this.mirc = mirc;
-    }
-    
     public Type getType()
     {
-        return Type.MINECRAFT;
+        return Type.PLAIN;
     }
     
     public void messageIn(RelayedMessage msg)
     {
-        String sender;
         
-        sender = msg.getField("sender");
-        
-        if(msg.getEvent() == "chat")
-        	mirc.adminMessageToGame(sender, msg.getField("message"));
-        else if(msg.getEvent() == "action")
-        	mirc.adminActionToGame(sender, msg.getField("message"));
-       	else if(msg.getEvent() == "join")
-       		mirc.adminEventToGame(sender, "joined IRC.");
-       	else if(msg.getEvent() == "part")
-       		mirc.adminEventToGame(sender, "left IRC.");
-       	else if(msg.getEvent() == "quit")
-       		mirc.adminEventToGame(sender, "quit IRC.");
     }
     
     public boolean userMessageIn(String username, RelayedMessage msg)

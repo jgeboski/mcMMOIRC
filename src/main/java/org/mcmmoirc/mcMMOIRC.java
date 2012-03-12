@@ -38,6 +38,8 @@ import com.gmail.nossr50.mcPermissions;
 
 import org.mcmmoirc.command.CA;
 import org.mcmmoirc.command.CmcMMOIRC;
+import org.mcmmoirc.point.AdminPoint;
+import org.mcmmoirc.point.GamePoint;
 
 public class mcMMOIRC extends JavaPlugin
 {
@@ -45,16 +47,19 @@ public class mcMMOIRC extends JavaPlugin
     
     public Configuration config;
     public CraftIRC craftirc;
-    public CommandExecutor mexecutor;
-    public MEndPoint mendpoint;
+    public CommandExecutor adminExec;
+    
+    public AdminPoint adminPoint;
+    public GamePoint gamePoint;
     
     private EventListener events;
     
     public void onLoad()
     {
-        config    = new Configuration(new File(getDataFolder(), "config.yml"));
-        events    = new EventListener(this);
-        mendpoint = new MEndPoint(this);
+        config     = new Configuration(new File(getDataFolder(), "config.yml"));
+        events     = new EventListener(this);
+        adminPoint = new AdminPoint(this);
+        gamePoint  = new GamePoint();
     }
     
     public void onEnable()
@@ -75,10 +80,13 @@ public class mcMMOIRC extends JavaPlugin
         
         craftirc  = (CraftIRC) plugin;
         command   = getServer().getPluginCommand("a");
-        mexecutor = command.getExecutor();
+        adminExec = command.getExecutor();
         
-        if(!craftirc.registerEndPoint(config.tag, mendpoint))
-            Log.severe("Unable to register CraftIRC tag: %s", config.tag);
+        if(!craftirc.registerEndPoint(config.adminTag, adminPoint))
+            Log.severe("Unable to register CraftIRC tag: %s", config.adminTag);
+        
+        if(!craftirc.registerEndPoint(config.gameTag, gamePoint))
+            Log.severe("Unable to register CraftIRC tag: %s", config.gameTag);
         
         command.setExecutor(new CA(this));
         getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
@@ -91,24 +99,28 @@ public class mcMMOIRC extends JavaPlugin
         PluginCommand command;
         
         command = getServer().getPluginCommand("a");
-        command.setExecutor(mexecutor);
+        command.setExecutor(adminExec);
     }
     
     public void reload()
     {
-        craftirc.unregisterEndPoint(config.tag);
+        craftirc.unregisterEndPoint(config.adminTag);
+        craftirc.unregisterEndPoint(config.gameTag);
         
         config.load();
         
-        if(!craftirc.registerEndPoint(config.tag, mendpoint))
-            Log.severe("Unable to register CraftIRC tag: %s", config.tag);
+        if(!craftirc.registerEndPoint(config.adminTag, adminPoint))
+            Log.severe("Unable to register CraftIRC tag: %s", config.adminTag);
+        
+        if(!craftirc.registerEndPoint(config.gameTag, gamePoint))
+            Log.severe("Unable to register CraftIRC tag: %s", config.gameTag);
     }
     
     /**
      * Test if a CommandSender has a specific permission
      * 
      * @param sender  A CommandSender
-     * @param perm    A string containing the permission node
+     * @param perm    A String containing the permission node
      * 
      * @return        TRUE if the player has permission,
      *                otherwise FALSE
@@ -127,7 +139,7 @@ public class mcMMOIRC extends JavaPlugin
      * informing them of their insufficient permissions. 
      * 
      * @param sender  A CommandSender
-     * @param perm    A string containing the permission node
+     * @param perm    A String containing the permission node
      * 
      * @return        TRUE if the player has permission,
      *                otherwise FALSE
@@ -144,84 +156,78 @@ public class mcMMOIRC extends JavaPlugin
     /**
      * Send a message to admin chat in game
      * 
-     * @param format  A format string
-     * @param args    Arguments corresponding to @param format
+     * @param rmsg  The RelayedMessage to send
      **/
-    public void messageAdmins(String format, Object ... args)
+    public void adminMessageToGame(RelayedMessage rmsg)
     {
         String msg;
         
-        msg = String.format(format, args);
+        msg = rmsg.getMessage(adminPoint);
         
-        for(Player player : getServer().getOnlinePlayers()) {
-            if(mcPermissions.getInstance().adminChat(player) || player.isOp())
-                player.sendMessage(msg);
+        for(Player p : getServer().getOnlinePlayers()) {
+            if(mcPermissions.getInstance().adminChat(p) || p.isOp())
+                p.sendMessage(msg);
         }
+        
+        Log.info("[mcMMOIRC] Game: %s", rmsg.getMessage(adminPoint));
+    }
+    
+    /**
+     * Send a message to admin chat in game
+     * 
+     * @param sender  A CommandSender
+     * @param target  A String containing a CraftIRC target
+     * @param msg     The message to send
+     **/
+    public void adminMessageToGame(CommandSender sender,
+                                   String target, String msg)
+    {
+        RelayedMessage rmsg;
+        Player p;
+        
+        rmsg = craftirc.newMsg(gamePoint, adminPoint, "chat");
+        
+        if(sender instanceof Player) {
+            p = (Player) sender;
+            
+            rmsg.setField("realSender", p.getName());
+            rmsg.setField("sender",     p.getDisplayName());
+            rmsg.setField("world",      p.getWorld().getName());
+        } else {
+            rmsg.setField("sender",     sender.getName());
+        }
+        
+        rmsg.setField("message", msg);
+        adminMessageToGame(rmsg);
     }
     
     /**
      * Send a message to admin channel tag
      * 
      * @param sender  A CommandSender
-     * @param msg     A string containing a message
+     * @param msg     The message to send
      **/
     public void adminMessageToIRC(CommandSender sender, String msg)
     {
         RelayedMessage rmsg;
-        Player player;
+        Player p;
         
-        rmsg = craftirc.newMsg(mendpoint, null, "chat");
+        rmsg = craftirc.newMsg(adminPoint, null, "chat");
         
         if(sender instanceof Player) {
-            player = (Player) sender;
+            p = (Player) sender;
             
-            if(!mcPermissions.getInstance().adminChat(player) && !player.isOp())
+            if(!mcPermissions.getInstance().adminChat(p) && !p.isOp())
                 return;
             
-            rmsg.setField("sender",     player.getDisplayName());
-            rmsg.setField("world",      player.getWorld().getName());
-            rmsg.setField("realSender", player.getName());
+            rmsg.setField("realSender", p.getName());
+            rmsg.setField("sender",     p.getDisplayName());
+            rmsg.setField("world",      p.getWorld().getName());
         } else {
             rmsg.setField("sender",     sender.getName());
         }
         
         rmsg.setField("message", msg);
         rmsg.post();
-    }
-    
-    /**
-     * Send a message to the admin channel in game
-     * 
-     * @param sender  The message sender
-     * @param msg     A string containing a message
-     **/
-    public void adminMessageToGame(String sender, String msg)
-    {
-        messageAdmins("%s{%s%s%s} %s", ChatColor.AQUA, ChatColor.DARK_PURPLE,
-            sender, ChatColor.AQUA, msg);
-    }
-    
-    /**
-     * Send an action to the admin channel in game
-     * 
-     * @param sender  The message sender
-     * @param msg     A string containing a message
-     **/
-    public void adminActionToGame(String sender, String msg)
-    {
-        messageAdmins("%s* %s%s%s %s", ChatColor.AQUA, ChatColor.DARK_PURPLE,
-            sender, ChatColor.AQUA, msg);
-    }
-    
-    /**
-     * Send an event to the admin channel in game
-     * 
-     * @param sender  The event trigger
-     * @param msg     A string containing a message
-     **/
-    public void adminEventToGame(String sender, String msg)
-    {
-        messageAdmins("%s* %s%s%s %s", ChatColor.AQUA, ChatColor.DARK_PURPLE,
-            sender, ChatColor.AQUA, msg);
     }
 }

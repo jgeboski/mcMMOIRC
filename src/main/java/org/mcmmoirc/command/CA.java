@@ -21,6 +21,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import com.gmail.nossr50.mcPermissions;
 
 import org.mcmmoirc.mcMMOIRC;
 
@@ -37,12 +40,20 @@ public class CA implements CommandExecutor
                              String label, String[] args)
     {
         String msg;
+        Player p;
         int i;
         
-        mirc.mexecutor.onCommand(sender, command, label, args);
-        
-        if(args.length < 1)
+        if(args.length < 1) {
+            mirc.adminExec.onCommand(sender, command, label, new String[0]);
             return true;
+        }
+        
+        if(sender instanceof Player) {
+            p = (Player) sender;
+            
+            if(!mcPermissions.getInstance().adminChat(p) && !p.isOp())
+                return true;
+        }
         
         msg = new String();
         for(i = 0; i < args.length; i++) {
@@ -52,6 +63,7 @@ public class CA implements CommandExecutor
                 msg += " ";
         }
         
+        mirc.adminMessageToGame(sender, "chat", msg);
         mirc.adminMessageToIRC(sender, msg);
         return true;
     }

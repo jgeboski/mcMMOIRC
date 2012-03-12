@@ -25,13 +25,15 @@ public class Configuration extends YamlConfiguration
 {
     private File file;
     
-    public String tag;
+    public String adminTag;
+    public String gameTag;
     
     public Configuration(File file)
     {
         this.file = file;
         
-        tag = new String();
+        adminTag = new String();
+        gameTag  = new String();
     }
     
     public void load()
@@ -42,7 +44,8 @@ public class Configuration extends YamlConfiguration
             Log.warning("Unable to load: %s", file.toString());
         }
         
-        tag = getString("tag", tag);
+        adminTag = getString("tags.admin", adminTag);
+        gameTag  = getString("tags.game",  gameTag);
         
         if(!file.exists())
             save();
@@ -50,7 +53,8 @@ public class Configuration extends YamlConfiguration
     
     public void save()
     {
-        set("tag", tag);
+        set("tags.admin", adminTag);
+        set("tags.game",  gameTag);
         
         try {
             super.save(file);
