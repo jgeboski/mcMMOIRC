@@ -17,11 +17,7 @@
 
 package org.mcmmoirc.point;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
 import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;

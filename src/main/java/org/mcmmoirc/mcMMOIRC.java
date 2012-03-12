@@ -18,10 +18,7 @@
 package org.mcmmoirc;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -31,7 +28,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
-import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
 import com.gmail.nossr50.mcPermissions;
@@ -47,10 +43,11 @@ public class mcMMOIRC extends JavaPlugin
     
     public Configuration config;
     public CraftIRC craftirc;
-    public CommandExecutor adminExec;
     
     public AdminPoint adminPoint;
     public GamePoint gamePoint;
+    
+    public CommandExecutor adminExec;
     
     private EventListener events;
     
@@ -78,9 +75,7 @@ public class mcMMOIRC extends JavaPlugin
             return;
         }
         
-        craftirc  = (CraftIRC) plugin;
-        command   = getServer().getPluginCommand("a");
-        adminExec = command.getExecutor();
+        craftirc = (CraftIRC) plugin;
         
         if(!craftirc.registerEndPoint(config.adminTag, adminPoint))
             Log.severe("Unable to register CraftIRC tag: %s", config.adminTag);
@@ -88,7 +83,10 @@ public class mcMMOIRC extends JavaPlugin
         if(!craftirc.registerEndPoint(config.gameTag, gamePoint))
             Log.severe("Unable to register CraftIRC tag: %s", config.gameTag);
         
+        command   = getServer().getPluginCommand("a");
+        adminExec = command.getExecutor();
         command.setExecutor(new CA(this));
+        
         getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
         
         events.register();
@@ -168,8 +166,6 @@ public class mcMMOIRC extends JavaPlugin
             if(mcPermissions.getInstance().adminChat(p) || p.isOp())
                 p.sendMessage(msg);
         }
-        
-        Log.info("[mcMMOIRC] Game: %s", rmsg.getMessage(adminPoint));
     }
     
     /**

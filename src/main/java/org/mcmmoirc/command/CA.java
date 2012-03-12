@@ -17,7 +17,6 @@
 
 package org.mcmmoirc.command;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -55,13 +54,8 @@ public class CA implements CommandExecutor
                 return true;
         }
         
-        msg = new String();
-        for(i = 0; i < args.length; i++) {
-            msg += args[i];
-            
-            if(i != (args.length - 1))
-                msg += " ";
-        }
+        for(msg = args[0], i = 1; i < args.length; i++)
+            msg = msg.concat(" " + args[i]);
         
         mirc.adminMessageToGame(sender, "chat", msg);
         mirc.adminMessageToIRC(sender, msg);
