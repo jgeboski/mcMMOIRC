@@ -32,8 +32,8 @@ public class Configuration extends YamlConfiguration
     {
         this.file = file;
         
-        adminTag = new String();
-        gameTag  = new String();
+        adminTag = "adminchat";
+        gameTag  = "gamechat";
     }
     
     public void load()
