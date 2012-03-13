@@ -45,20 +45,31 @@ public class EventListener implements Listener
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerChat(PlayerChatEvent event)
+    public void onPlayerChat(PlayerChatEvent e)
     {
         PlayerProfile pp;
+        String party, msg;
         Player p;
         
-        p  = event.getPlayer();
+        p  = e.getPlayer();
         pp = Users.getProfile(p);
+        msg   = e.getMessage();
         
-        if(!pp.getAdminChatMode())
-            return;
-        
-        event.setCancelled(true);
-        
-        mirc.adminMessageToGame(p, "chat", event.getMessage());
-        mirc.adminMessageToIRC(p, event.getMessage());
+        if(pp.getPartyChatMode()) {
+            party = pp.getParty();
+            
+            if(!mirc.partyPoints.containsKey(party))
+                return;
+            
+            e.setCancelled(true);
+            
+            mirc.partyMessageToGame(p, "chat", party, msg);
+            mirc.partyMessageToIRC(p, "chat", party, msg);
+        } else if(!pp.getAdminChatMode()) {
+            e.setCancelled(true);
+            
+            mirc.adminMessageToGame(p, "chat", msg);
+            mirc.adminMessageToIRC(p, "chat", msg);
+        }
     }
 }

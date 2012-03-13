@@ -22,15 +22,17 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.gmail.nossr50.datatypes.PlayerProfile;
 import com.gmail.nossr50.mcPermissions;
+import com.gmail.nossr50.Users;
 
 import org.mcmmoirc.mcMMOIRC;
 
-public class CA implements CommandExecutor
+public class CP implements CommandExecutor
 {
     protected mcMMOIRC mirc;
     
-    public CA(mcMMOIRC mirc)
+    public CP(mcMMOIRC mirc)
     {
         this.mirc = mirc;
     }
@@ -38,27 +40,40 @@ public class CA implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command,
                              String label, String[] args)
     {
-        String msg;
+        PlayerProfile pp;
+        String msg, party;
         Player p;
         int i;
         
         if(args.length < 1) {
-            mirc.adminExec.onCommand(sender, command, label, new String[0]);
+            mirc.partyExec.onCommand(sender, command, label, new String[0]);
             return true;
         }
         
         if(sender instanceof Player) {
             p = (Player) sender;
             
-            if(!mcPermissions.getInstance().adminChat(p) && !p.isOp())
+            if(!mcPermissions.getInstance().party(p))
                 return true;
+            
+            i     = 0;
+            pp    = Users.getProfile(p);
+            party = pp.getParty();
+        } else {
+            i     = 1;
+            party = args[0];
         }
         
-        for(msg = args[0], i = 1; i < args.length; i++)
+        if(!mirc.partyPoints.containsKey(party)) {
+            mirc.partyExec.onCommand(sender, command, label, args);
+            return true;
+        }
+        
+        for(msg = args[i], i++; i < args.length; i++)
             msg = msg.concat(" " + args[i]);
         
-        mirc.adminMessageToGame(sender, "chat", msg);
-        mirc.adminMessageToIRC(sender, "chat", msg);
+        mirc.partyMessageToGame(sender, "chat", party, msg);
+        mirc.partyMessageToIRC(sender, "chat", party, msg);
         return true;
     }
 }
