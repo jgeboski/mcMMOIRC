@@ -44,16 +44,16 @@ public class EventListener implements Listener
         pm.registerEvents(this, mirc);
     }
     
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerChat(PlayerChatEvent e)
     {
         PlayerProfile pp;
         String party, msg;
         Player p;
         
-        p  = e.getPlayer();
-        pp = Users.getProfile(p);
-        msg   = e.getMessage();
+        p   = e.getPlayer();
+        pp  = Users.getProfile(p);
+        msg = e.getMessage();
         
         if(pp.getPartyChatMode()) {
             party = pp.getParty();
