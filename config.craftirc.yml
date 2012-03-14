@@ -1,0 +1,237 @@
+# Example CraftIRC configuration for use with mcMMOIRC
+#
+# This configuration will require that tags have been configured
+# correctly in mcMMOIRC's configuration.
+#
+# Example mcMMOIRC configuration:
+#   https://github.com/jgeboski/mcMMOIRC/blob/master/config.yml
+#
+# This file is based on:
+#   https://github.com/CraftIRC/CraftIRC3/blob/master/config.yml
+#
+# Note: most of the original commenting has been removed to focus
+# on the configuration of mcMMOIRC.
+
+settings:
+  minecraft-tag: 'minecraft'
+  cancelled-tag: 'cancelled'
+  console-tag: 'console'
+  
+  auto-paths: true
+  minecraft-group-name: 'minecraft'
+  irc-group-name: 'irc'
+  
+  tag-groups:
+  
+  cancel-chat: false
+  command-prefix: '.'
+  
+  irc-commands:
+    say: ['say','mc']
+    players: ['players']
+    cmd: ['cmd','c']
+  
+  debug: false
+  
+  console-commands: ['reload', 'save-all']
+  hold-after-enable: {chat: 0, joins: 0, quits: 0, kicks: 0, bans: 0}
+  retry-delay: 10
+  
+  formatting:
+    from-game:
+      chat: '(%sender%) %message%'
+      private: '(%sender%) %message%'
+      action: '* %sender% %message%'
+      join: '[%sender% connected]'
+      quit: '[%sender% disconnected]'
+      kick: '[%moderator% KICKED %sender% (%message%)]'
+      admin: '%sender% to online admins ->- %message%'
+      generic: '%message%'
+      death: '%message%'
+    from-irc:
+      chat: '[%srcChannel%] <%sender%> %message%'
+      private: '%sender% whispers> %message%'
+      action: '[%srcChannel%] * %sender% %message%'
+      join: '[%srcChannel%] * Joins: %sender%'
+      part: '[%srcChannel%] * Parts: %sender%'
+      quit: '[%srcChannel%] * Quits: %sender% (%message%)'
+      kick: '[%srcChannel%] * %sender% was kicked by %moderator% (%message%)'
+      nick: '[%srcChannel%] * %sender% is now known as %message%'
+      generic: '%message%'
+    from-plain:
+
+bots:
+
+  - nickname: 'CraftIRCbot'
+    server: 'irc.esper.net'
+    port: 6667
+    userident: 'bot'
+    serverpass: ''
+    ssl: false
+    
+    message-delay: 1000
+    queue-size: 5
+    
+    admin-prefixes: ['@', '%']
+    ignored-users: []
+    
+    auth:
+      method: 'none'
+      username: ''
+      password: ''
+    
+    on-connect:
+    
+    channels:
+      - name: '#adminchan'
+        password: ''
+        tag: 'adminchan'
+        on-join:
+      
+      - name: '#testchan'
+        password: ''
+        tag: 'testchan'
+        on-join:
+    
+    irc-nickname-map:
+    use-map-as-whitelist: false
+
+paths:
+  ## Admin Chat -> Admin Channel
+  #
+  - source: 'adminchat'
+    target: 'adminchan'
+    
+    attributes:
+      chat: true
+  
+  ## Admin Channel -> Admin Chat
+  #
+  - source: 'adminchan'
+    target: 'adminchat'
+    
+    attributes:
+      chat: true
+      private: true
+      action: true
+      join: true
+      part: true
+      quit: true
+      kick: true
+      nick: true
+      generic: true
+    
+    # This will apply the default mcMMO formatting to all messages coming
+    # from the Admin Chat channel
+    formatting:
+      chat: '%cyan%(%purple%%sender%%cyan%) %message%'
+      private: '%cyan%(%purple%%sender%%cyan%) %message%'
+      action: '%cyan%* %purple%%sender%%cyan% %message%'
+      join: '%cyan%* Joins: %purple%%sender%'
+      part: '%cyan%* Parts: %purple%%sender%'
+      quit: '%cyan%* Quits: %purple%%sender%'
+      kick: '%cyan%* %purple%%sender%%cyan% was kicked by %purple%%moderator%%cyan% (%message%)'
+      nick: '%cyan%* %purple%%sender%%cyan% is now known as %purple%%message%'
+      generic: '%cyan%%message%'
+  
+  ## Game Chat -> Admin Chat
+  #
+  # The formatting for messages sent to Admin Chat from in game
+  - source: 'gamechat'
+    target: 'adminchat'
+    
+    attributes:
+      chat: true
+    
+    # Currently, only the "chat" formatting is needed
+    formatting:
+      chat: '%cyan%(%sender%%cyan%) %message%'
+  
+  
+  ## Party 'test' Chat -> Party 'test' Channel
+  #
+  - source: 'testparty'
+    target: 'testchan'
+    
+    attributes:
+      chat: true
+  
+  ## Party 'test' Channel -> Party 'test' Chat
+  #
+  - source: 'testchan'
+    target: 'testparty'
+    
+    attributes:
+      chat: true
+      private: true
+      action: true
+      join: true
+      part: true
+      quit: true
+      kick: true
+      nick: true
+      generic: true
+    
+    # This will apply the default mcMMO formatting to all messages coming
+    # from the Party 'test' channel
+    formatting:
+      chat: '%green%(%purple%%sender%%green%) %message%'
+      private: '%green%(%purple%%sender%%green%) %message%'
+      action: '%green%* %purple%%sender%%green% %message%'
+      join: '%green%* Joins: %purple%%sender%'
+      part: '%green%* Parts: %purple%%sender%'
+      quit: '%green%* Quits: %purple%%sender%'
+      kick: '%green%* %purple%%sender%%green% was kicked by %purple%%moderator%%green% (%message%)'
+      nick: '%green%* %purple%%sender%%green% is now known as %purple%%message%'
+      generic: '%green%%message%'
+  
+  ## Game Chat -> Party 'test' Chat
+  #
+  # The formatting for messages sent to Party 'test' Chat from in game
+  - source: 'gamechat'
+    target: 'testparty'
+    
+    attributes:
+      chat: true
+    
+    # Currently, only the "chat" formatting is needed
+    formatting:
+      chat: '%green%(%sender%%green%) %message%'
+
+default-attributes:
+  disable: true
+  
+  # For this example's sake, we'll leave everything disabled
+  attributes:
+    chat: false
+    action: false
+    join: false
+    part: false
+    nick: false
+    quit: false
+    kick: false
+    private: false
+    command: false
+    say: false
+    generic: false
+    death: false
+    admin: false
+    colors: true
+
+colormap:
+  - {irc: 0, game: "\u00A70", name: 'background'}
+  - {irc: 2, game: "\u00A71", name: 'navy'}
+  - {irc: 3, game: "\u00A72", name: 'darkgreen'}
+  - {irc: 10, game: "\u00A73", name: 'teal'}
+  - {irc: 5, game: "\u00A74", name: 'maroon'}
+  - {irc: 6, game: "\u00A75", name: 'purple'}
+  - {irc: 7, game: "\u00A76", name: 'orange'}
+  - {irc: 15, game: "\u00A77", name: 'grey'}
+  - {irc: 14, game: "\u00A78", name: 'darkgrey'}
+  - {irc: 12, game: "\u00A79", name: 'blue'}
+  - {irc: 9, game: "\u00A7a", name: 'green'}
+  - {irc: 11, game: "\u00A7b", name: 'cyan'}
+  - {irc: 4, game: "\u00A7c", name: 'red'}
+  - {irc: 13, game: "\u00A7d", name: 'magenta'}
+  - {irc: 8, game: "\u00A7e", name: 'yellow'}
+  - {irc: 1, game: "\u00A7f", name: 'foreground'}

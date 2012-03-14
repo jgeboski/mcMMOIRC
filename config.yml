@@ -1,0 +1,21 @@
+# Example mcMMOIRC configuration
+#
+# This configuration file specifies tags for CraftIRC's
+# configuration. CraftIRC's configuration file will need
+# to be modified before mcMMOIRC will work correctly.
+#
+# Example CraftIRC configuration:
+#   https://github.com/jgeboski/mcMMOIRC/blob/master/config.craftirc.yml
+
+# Declares the tags to be used in CraftIRC's configuration
+tags:
+  # Tag that represents messages coming from Admin Chat
+  admin: adminchat
+  
+  # Tag that represents messages coming from the game
+  game: gamechat
+
+# A list of parties to relay to CraftIRC
+parties:
+  - name: test
+    tag: testparty
