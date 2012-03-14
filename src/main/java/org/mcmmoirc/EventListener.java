@@ -65,7 +65,7 @@ public class EventListener implements Listener
             
             mirc.partyMessageToGame(p, "chat", party, msg);
             mirc.partyMessageToIRC(p, "chat", party, msg);
-        } else if(!pp.getAdminChatMode()) {
+        } else if(pp.getAdminChatMode()) {
             e.setCancelled(true);
             
             mirc.adminMessageToGame(p, "chat", msg);
