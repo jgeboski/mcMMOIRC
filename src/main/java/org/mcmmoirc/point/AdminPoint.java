@@ -19,12 +19,11 @@ package org.mcmmoirc.point;
 
 import java.util.List;
 
-import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
 import org.mcmmoirc.mcMMOIRC;
 
-public class AdminPoint implements EndPoint
+public class AdminPoint extends GamePoint
 {
     protected mcMMOIRC mirc;
     
@@ -33,33 +32,8 @@ public class AdminPoint implements EndPoint
         this.mirc = mirc;
     }
     
-    public Type getType()
-    {
-        return Type.MINECRAFT;
-    }
-    
     public void messageIn(RelayedMessage msg)
     {
         mirc.adminMessageToGame(msg);
-    }
-    
-    public boolean userMessageIn(String username, RelayedMessage msg)
-    {
-        return false;
-    }
-    
-    public boolean adminMessageIn(RelayedMessage msg)
-    {
-        return false;
-    }
-    
-    public List<String> listUsers()
-    {
-        return null;
-    }
-    
-    public List<String> listDisplayUsers()
-    {
-        return null;
     }
 }

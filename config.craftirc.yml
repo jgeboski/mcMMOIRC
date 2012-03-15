@@ -135,10 +135,10 @@ paths:
       nick: '%cyan%* %purple%%sender%%cyan% is now known as %purple%%message%'
       generic: '%cyan%%message%'
   
-  ## Game Chat -> Admin Chat
+  ## Default -> Admin Chat
   #
   # The formatting for messages sent to Admin Chat from in game
-  - source: 'gamechat'
+  - source: 'default'
     target: 'adminchat'
     
     attributes:
@@ -189,10 +189,10 @@ paths:
       nick: '%green%* %purple%%sender%%green% is now known as %purple%%message%'
       generic: '%green%%message%'
   
-  ## Game Chat -> Party 'test' Chat
+  ## Default -> Party 'test' Chat
   #
   # The formatting for messages sent to Party 'test' Chat from in game
-  - source: 'gamechat'
+  - source: 'default'
     target: 'testparty'
     
     attributes:
@@ -203,10 +203,10 @@ paths:
       chat: '%green%(%sender%%green%) %message%'
       action: '%green%* %sender%%green% %message%'
   
-  ## Game Chat -> Party Chat
+  ## Default -> Party Chat
   #
   # The default formatting for messages sent to Party Chat from in game
-  - source: 'gamechat'
+  - source: 'default'
     target: 'partychat'
     
     attributes:

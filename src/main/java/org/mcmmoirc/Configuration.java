@@ -30,7 +30,7 @@ public class Configuration extends YamlConfiguration
     private File file;
     
     public String adminTag;
-    public String gameTag;
+    public String defaultTag;
     public String partyTag;
     
     public HashMap<String, String> parties;
@@ -39,10 +39,10 @@ public class Configuration extends YamlConfiguration
     {
         this.file = file;
         
-        adminTag = "adminchat";
-        gameTag  = "gamechat";
-        partyTag = "partychat";
-        parties  = new HashMap<String, String>();
+        adminTag   = "adminchat";
+        defaultTag = "default";
+        partyTag   = "partychat";
+        parties    = new HashMap<String, String>();
     }
     
     public void load()
@@ -55,9 +55,9 @@ public class Configuration extends YamlConfiguration
             Log.warning("Unable to load: %s", file.toString());
         }
         
-        adminTag = getString("tags.admin", adminTag);
-        gameTag  = getString("tags.game",  gameTag);
-        partyTag = getString("tags.party", partyTag);
+        adminTag   = getString("tags.admin",   adminTag);
+        defaultTag = getString("tags.default", defaultTag);
+        partyTag   = getString("tags.party",   partyTag);
         
         for(Map<?, ?> m : getMapList("parties")) {
             party = (String) m.get("name");
@@ -79,9 +79,9 @@ public class Configuration extends YamlConfiguration
         Map<String, String> cparty;
         String party, tag;
         
-        set("tags.admin", adminTag);
-        set("tags.game",  gameTag);
-        set("tags.party", partyTag);
+        set("tags.admin",   adminTag);
+        set("tags.default", defaultTag);
+        set("tags.party",   partyTag);
         
         cparties = new ArrayList<Map<String, String>>();
         

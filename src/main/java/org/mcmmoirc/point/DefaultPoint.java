@@ -19,36 +19,38 @@ package org.mcmmoirc.point;
 
 import java.util.List;
 
+import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
-import org.mcmmoirc.mcMMOIRC;
-
-public class PartyPoint extends GamePoint
+public class DefaultPoint implements EndPoint
 {
-    protected mcMMOIRC mirc;
-    
-    private String tag;
-    private String party;
-    
-    public PartyPoint(mcMMOIRC mirc, String tag, String party)
+    public Type getType()
     {
-        this.mirc  = mirc;
-        this.tag   = tag;
-        this.party = party;
-    }
-    
-    public String getTag()
-    {
-        return tag;
-    }
-    
-    public String getParty()
-    {
-        return party;
+        return Type.PLAIN;
     }
     
     public void messageIn(RelayedMessage msg)
     {
-        mirc.partyMessageToGame(msg, party);
+        
+    }
+    
+    public boolean userMessageIn(String username, RelayedMessage msg)
+    {
+        return false;
+    }
+    
+    public boolean adminMessageIn(RelayedMessage msg)
+    {
+        return false;
+    }
+    
+    public List<String> listUsers()
+    {
+        return null;
+    }
+    
+    public List<String> listDisplayUsers()
+    {
+        return null;
     }
 }

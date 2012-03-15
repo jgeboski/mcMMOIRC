@@ -9,11 +9,11 @@
 
 # Declares the tags to be used in CraftIRC's configuration
 tags:
-  # Tag that represents messages coming from Admin Chat
+  # The tag that represents the Admin Chat
   admin: adminchat
   
-  # Tag that represents messages coming from the game
-  game: gamechat
+  # The default tag used for formatting
+  default: default
   
   # Default tag for parties; this can be used for custom formatting
   party: partychat

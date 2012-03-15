@@ -41,6 +41,7 @@ import org.mcmmoirc.command.CA;
 import org.mcmmoirc.command.CmcMMOIRC;
 import org.mcmmoirc.command.CP;
 import org.mcmmoirc.point.AdminPoint;
+import org.mcmmoirc.point.DefaultPoint;
 import org.mcmmoirc.point.GamePoint;
 import org.mcmmoirc.point.PartyPoint;
 
@@ -52,8 +53,8 @@ public class mcMMOIRC extends JavaPlugin
     public CraftIRC craftirc;
     
     public AdminPoint adminPoint;
-    public GamePoint gamePoint;
-    public PartyPoint partyPoint;
+    public DefaultPoint defaultPoint;
+    public GamePoint partyPoint;
     public HashMap<String, PartyPoint> partyPoints;
     
     public CommandExecutor adminExec;
@@ -66,10 +67,10 @@ public class mcMMOIRC extends JavaPlugin
         config = new Configuration(new File(getDataFolder(), "config.yml"));
         events = new EventListener(this);
         
-        adminPoint  = new AdminPoint(this);
-        gamePoint   = new GamePoint();
-        partyPoint  = new PartyPoint();
-        partyPoints = new HashMap<String, PartyPoint>();
+        adminPoint   = new AdminPoint(this);
+        defaultPoint = new DefaultPoint();
+        partyPoint   = new GamePoint();
+        partyPoints  = new HashMap<String, PartyPoint>();
     }
     
     public void onEnable()
@@ -94,16 +95,14 @@ public class mcMMOIRC extends JavaPlugin
         
         craftirc = (CraftIRC) plugin;
         
-        registerEndPoint(config.adminTag, adminPoint);
-        registerEndPoint(config.gameTag,  gamePoint);
-        registerEndPoint(config.partyTag, partyPoint);
+        registerEndPoint(config.adminTag,   adminPoint);
+        registerEndPoint(config.defaultTag, defaultPoint);
+        registerEndPoint(config.partyTag,   partyPoint);
         
         for(Entry<String, String> e : config.parties.entrySet()) {
             party  = e.getKey();
             tag    = e.getValue();
             partyp = new PartyPoint(this, tag, party);
-            
-            Log.info("Registering: %s: %s", party, tag);
             
             if(registerEndPoint(tag, partyp))
                 partyPoints.put(party, partyp);
@@ -132,7 +131,7 @@ public class mcMMOIRC extends JavaPlugin
         command.setExecutor(partyExec);
         
         craftirc.unregisterEndPoint(config.adminTag);
-        craftirc.unregisterEndPoint(config.gameTag);
+        craftirc.unregisterEndPoint(config.defaultTag);
         craftirc.unregisterEndPoint(config.partyTag);
         
         for(PartyPoint v : partyPoints.values())
@@ -145,7 +144,7 @@ public class mcMMOIRC extends JavaPlugin
         PartyPoint partyp;
         
         craftirc.unregisterEndPoint(config.adminTag);
-        craftirc.unregisterEndPoint(config.gameTag);
+        craftirc.unregisterEndPoint(config.defaultTag);
         craftirc.unregisterEndPoint(config.partyTag);
         
         for(PartyPoint v : partyPoints.values())
@@ -153,9 +152,9 @@ public class mcMMOIRC extends JavaPlugin
         
         config.load();
         
-        registerEndPoint(config.adminTag, adminPoint);
-        registerEndPoint(config.gameTag,  gamePoint);
-        registerEndPoint(config.partyTag, partyPoint);
+        registerEndPoint(config.adminTag,   adminPoint);
+        registerEndPoint(config.defaultTag, defaultPoint);
+        registerEndPoint(config.partyTag,   partyPoint);
         
         for(Entry<String, String> e : config.parties.entrySet()) {
             party  = e.getKey();
@@ -261,7 +260,7 @@ public class mcMMOIRC extends JavaPlugin
     {
         RelayedMessage rmsg;
         
-        rmsg = craftirc.newMsg(gamePoint, adminPoint, event);
+        rmsg = craftirc.newMsg(defaultPoint, adminPoint, event);
         rmsg = fillMessage(rmsg, sender, msg);
         
         adminMessageToGame(rmsg);
@@ -294,15 +293,15 @@ public class mcMMOIRC extends JavaPlugin
     public void partyMessageToGame(RelayedMessage rmsg, String party)
     {
         PlayerProfile pp;
-        PartyPoint pep;
+        GamePoint gp;
         String msg;
         
-        pep = partyPoints.get(party);
+        gp = partyPoints.get(party);
         
-        if(pep == null)
-            pep = partyPoint;
+        if(gp == null)
+            gp = partyPoint;
         
-        msg = rmsg.getMessage(pep);
+        msg = rmsg.getMessage(gp);
         rmsg.setField("srcParty", party);
         
         for(Player p : getServer().getOnlinePlayers()) {
@@ -325,14 +324,14 @@ public class mcMMOIRC extends JavaPlugin
                                    String party, String msg)
     {
         RelayedMessage rmsg;
-        PartyPoint pep;
+        GamePoint gp;
         
-        pep = partyPoints.get(party);
+        gp = partyPoints.get(party);
         
-        if(pep == null)
-            pep = partyPoint;
+        if(gp == null)
+            gp = partyPoint;
         
-        rmsg = craftirc.newMsg(gamePoint, pep, event);
+        rmsg = craftirc.newMsg(defaultPoint, gp, event);
         rmsg = fillMessage(rmsg, sender, msg);
         
         partyMessageToGame(rmsg, party);
@@ -350,14 +349,14 @@ public class mcMMOIRC extends JavaPlugin
                                   String party, String msg)
     {
         RelayedMessage rmsg;
-        PartyPoint pep;
+        GamePoint gp;
         
-        pep = partyPoints.get(party);
+        gp = partyPoints.get(party);
         
-        if(pep == null)
-            pep = partyPoint;
+        if(gp == null)
+            gp = partyPoint;
         
-        rmsg = craftirc.newMsg(pep, null, event);
+        rmsg = craftirc.newMsg(gp, null, event);
         rmsg = fillMessage(rmsg, sender, msg);
         
         rmsg.setField("srcParty", party);

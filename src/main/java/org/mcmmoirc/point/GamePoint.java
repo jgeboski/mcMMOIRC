@@ -26,7 +26,7 @@ public class GamePoint implements EndPoint
 {
     public Type getType()
     {
-        return Type.PLAIN;
+        return Type.MINECRAFT;
     }
     
     public void messageIn(RelayedMessage msg)
