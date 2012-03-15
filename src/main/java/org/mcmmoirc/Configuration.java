@@ -41,6 +41,7 @@ public class Configuration extends YamlConfiguration
         
         adminTag = "adminchat";
         gameTag  = "gamechat";
+        partyTag = "partychat";
         parties  = new HashMap<String, String>();
     }
     
