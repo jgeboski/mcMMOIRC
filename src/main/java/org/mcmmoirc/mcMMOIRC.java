@@ -38,6 +38,7 @@ import com.gmail.nossr50.Users;
 
 import org.mcmmoirc.command.CA;
 import org.mcmmoirc.command.CmcMMOIRC;
+import org.mcmmoirc.command.CMe;
 import org.mcmmoirc.command.CP;
 import org.mcmmoirc.point.AdminPoint;
 import org.mcmmoirc.point.GamePoint;
@@ -55,6 +56,7 @@ public class mcMMOIRC extends JavaPlugin
     public HashMap<String, PartyPoint> partyPoints;
     
     public CommandExecutor adminExec;
+    public CommandExecutor meExec;
     public CommandExecutor partyExec;
     
     private EventListener events;
@@ -114,12 +116,15 @@ public class mcMMOIRC extends JavaPlugin
         adminExec = command.getExecutor();
         command.setExecutor(new CA(this));
         
+        command = getServer().getPluginCommand("me");
+        meExec  = command.getExecutor();
+        command.setExecutor(new CMe(this));
+        
         command   = getServer().getPluginCommand("p");
         partyExec = command.getExecutor();
         command.setExecutor(new CP(this));
         
         getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
-        
         events.register();
     }
     
@@ -129,6 +134,9 @@ public class mcMMOIRC extends JavaPlugin
         
         command = getServer().getPluginCommand("a");
         command.setExecutor(adminExec);
+        
+        command = getServer().getPluginCommand("me");
+        command.setExecutor(meExec);
         
         command = getServer().getPluginCommand("p");
         command.setExecutor(partyExec);

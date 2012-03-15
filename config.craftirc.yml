@@ -104,6 +104,7 @@ paths:
     
     attributes:
       chat: true
+      action: true
   
   ## Admin Channel -> Admin Chat
   #
@@ -142,10 +143,12 @@ paths:
     
     attributes:
       chat: true
+      action: true
     
     # Currently, only the "chat" formatting is needed
     formatting:
       chat: '%cyan%(%sender%%cyan%) %message%'
+      action: '%cyan%* %sender%%cyan% %message%'
   
   
   ## Party 'test' Chat -> Party 'test' Channel
@@ -155,6 +158,7 @@ paths:
     
     attributes:
       chat: true
+      action: true
   
   ## Party 'test' Channel -> Party 'test' Chat
   #
@@ -193,10 +197,11 @@ paths:
     
     attributes:
       chat: true
+      action: true
     
-    # Currently, only the "chat" formatting is needed
     formatting:
       chat: '%green%(%sender%%green%) %message%'
+      action: '%green%* %sender%%green% %message%'
 
 default-attributes:
   disable: true

@@ -4,6 +4,7 @@ description: Integrate the mcMMO chat system with CraftIRC
 author: jgeboski
 main: org.mcmmoirc.mcMMOIRC
 depend: ['CraftIRC', 'mcMMO']
+softdepend: ['Essentials']
 
 commands:
   mcmmoirc:
