@@ -202,6 +202,20 @@ paths:
     formatting:
       chat: '%green%(%sender%%green%) %message%'
       action: '%green%* %sender%%green% %message%'
+  
+  ## Game Chat -> Party Chat
+  #
+  # The default formatting for messages sent to Party Chat from in game
+  - source: 'gamechat'
+    target: 'partychat'
+    
+    attributes:
+      chat: true
+      action: true
+    
+    formatting:
+      chat: '%green%(%sender%%green%>) %message%'
+      action: '%green%* %sender%%green% %message%'
 
 default-attributes:
   disable: true

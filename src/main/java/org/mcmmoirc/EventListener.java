@@ -57,10 +57,6 @@ public class EventListener implements Listener
         
         if(pp.getPartyChatMode()) {
             party = pp.getParty();
-            
-            if(!mirc.partyPoints.containsKey(party))
-                return;
-            
             e.setCancelled(true);
             
             mirc.partyMessageToGame(p, "chat", party, msg);

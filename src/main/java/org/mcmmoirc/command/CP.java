@@ -51,22 +51,20 @@ public class CP implements CommandExecutor
         }
         
         if(sender instanceof Player) {
-            p = (Player) sender;
+            p  = (Player) sender;
+            pp = Users.getProfile(p);
             
-            if(!mcPermissions.getInstance().party(p))
+            if(!mcPermissions.getInstance().party(p) || !pp.inParty())
                 return true;
             
             i     = 0;
-            pp    = Users.getProfile(p);
             party = pp.getParty();
         } else {
+            if(args.length < 2)
+                return true;
+            
             i     = 1;
             party = args[0];
-        }
-        
-        if(!mirc.partyPoints.containsKey(party)) {
-            mirc.partyExec.onCommand(sender, command, label, args);
-            return true;
         }
         
         for(msg = args[i], i++; i < args.length; i++)

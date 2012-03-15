@@ -30,6 +30,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
+import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
 import com.gmail.nossr50.datatypes.PlayerProfile;
@@ -53,6 +54,7 @@ public class mcMMOIRC extends JavaPlugin
     
     public AdminPoint adminPoint;
     public GamePoint gamePoint;
+    public PartyPoint partyPoint;
     public HashMap<String, PartyPoint> partyPoints;
     
     public CommandExecutor adminExec;
@@ -68,6 +70,7 @@ public class mcMMOIRC extends JavaPlugin
         
         adminPoint  = new AdminPoint(this);
         gamePoint   = new GamePoint();
+        partyPoint  = new PartyPoint();
         partyPoints = new HashMap<String, PartyPoint>();
     }
     
@@ -93,11 +96,9 @@ public class mcMMOIRC extends JavaPlugin
         
         craftirc = (CraftIRC) plugin;
         
-        if(!craftirc.registerEndPoint(config.adminTag, adminPoint))
-            Log.severe("Unable to register CraftIRC tag: %s", config.adminTag);
-        
-        if(!craftirc.registerEndPoint(config.gameTag, gamePoint))
-            Log.severe("Unable to register CraftIRC tag: %s", config.gameTag);
+        registerEndPoint(config.adminTag, adminPoint);
+        registerEndPoint(config.gameTag,  gamePoint);
+        registerEndPoint(config.partyTag, partyPoint);
         
         for(Entry<String, String> e : config.parties.entrySet()) {
             party  = e.getKey();
@@ -106,10 +107,8 @@ public class mcMMOIRC extends JavaPlugin
             
             Log.info("Registering: %s: %s", party, tag);
             
-            if(craftirc.registerEndPoint(tag, partyp))
+            if(registerEndPoint(tag, partyp))
                 partyPoints.put(party, partyp);
-            else
-                Log.severe("Unable to register CraftIRC tag: %s", tag);
         }
         
         command   = getServer().getPluginCommand("a");
@@ -143,6 +142,7 @@ public class mcMMOIRC extends JavaPlugin
         
         craftirc.unregisterEndPoint(config.adminTag);
         craftirc.unregisterEndPoint(config.gameTag);
+        craftirc.unregisterEndPoint(config.partyTag);
         
         for(PartyPoint v : partyPoints.values())
             craftirc.unregisterEndPoint(v.getTag());
@@ -155,28 +155,34 @@ public class mcMMOIRC extends JavaPlugin
         
         craftirc.unregisterEndPoint(config.adminTag);
         craftirc.unregisterEndPoint(config.gameTag);
+        craftirc.unregisterEndPoint(config.partyTag);
         
         for(PartyPoint v : partyPoints.values())
             craftirc.unregisterEndPoint(v.getTag());
         
         config.load();
         
-        if(!craftirc.registerEndPoint(config.adminTag, adminPoint))
-            Log.severe("Unable to register CraftIRC tag: %s", config.adminTag);
-        
-        if(!craftirc.registerEndPoint(config.gameTag, gamePoint))
-            Log.severe("Unable to register CraftIRC tag: %s", config.gameTag);
+        registerEndPoint(config.adminTag, adminPoint);
+        registerEndPoint(config.gameTag,  gamePoint);
+        registerEndPoint(config.partyTag, partyPoint);
         
         for(Entry<String, String> e : config.parties.entrySet()) {
             party  = e.getKey();
             tag    = e.getValue();
             partyp = new PartyPoint(this, tag, party);
             
-            if(craftirc.registerEndPoint(tag, partyp))
+            if(registerEndPoint(tag, partyp))
                 partyPoints.put(party, partyp);
-            else
-                Log.severe("Unable to register CraftIRC tag: %s", tag);
         }
+    }
+    
+    private boolean registerEndPoint(String tag, EndPoint ep)
+    {
+        if(craftirc.registerEndPoint(tag, ep))
+            return true;
+        
+        Log.severe("Unable to register CraftIRC tag: %s", tag);
+        return false;
     }
     
     private RelayedMessage fillMessage(RelayedMessage rmsg,
@@ -303,10 +309,10 @@ public class mcMMOIRC extends JavaPlugin
         pep = partyPoints.get(party);
         
         if(pep == null)
-            return;
+            pep = partyPoint;
         
-        rmsg.setField("srcParty", party);
         msg = rmsg.getMessage(pep);
+        rmsg.setField("srcParty", party);
         
         for(Player p : getServer().getOnlinePlayers()) {
             pp = Users.getProfile(p);
@@ -333,7 +339,7 @@ public class mcMMOIRC extends JavaPlugin
         pep = partyPoints.get(party);
         
         if(pep == null)
-            return;
+            pep = partyPoint;
         
         rmsg = craftirc.newMsg(gamePoint, pep, event);
         rmsg = fillMessage(rmsg, sender, msg);
@@ -358,7 +364,7 @@ public class mcMMOIRC extends JavaPlugin
         pep = partyPoints.get(party);
         
         if(pep == null)
-            return;
+            pep = partyPoint;
         
         rmsg = craftirc.newMsg(pep, null, event);
         rmsg = fillMessage(rmsg, sender, msg);

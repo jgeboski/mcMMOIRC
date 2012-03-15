@@ -31,6 +31,8 @@ public class Configuration extends YamlConfiguration
     
     public String adminTag;
     public String gameTag;
+    public String partyTag;
+    
     public HashMap<String, String> parties;
     
     public Configuration(File file)
@@ -54,6 +56,7 @@ public class Configuration extends YamlConfiguration
         
         adminTag = getString("tags.admin", adminTag);
         gameTag  = getString("tags.game",  gameTag);
+        partyTag = getString("tags.party", partyTag);
         
         for(Map<?, ?> m : getMapList("parties")) {
             party = (String) m.get("name");
@@ -77,6 +80,7 @@ public class Configuration extends YamlConfiguration
         
         set("tags.admin", adminTag);
         set("tags.game",  gameTag);
+        set("tags.party", partyTag);
         
         cparties = new ArrayList<Map<String, String>>();
         

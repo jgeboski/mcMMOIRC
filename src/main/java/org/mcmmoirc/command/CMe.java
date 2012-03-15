@@ -57,11 +57,9 @@ public class CMe implements CommandExecutor
         if(pp.getPartyChatMode()) {
             party = pp.getParty();
             
-            if(mirc.partyPoints.containsKey(party)) {
-                mirc.partyMessageToGame(sender, "action", party, msg);
-                mirc.partyMessageToIRC(sender, "action", party, msg);
-                return true;
-            }
+            mirc.partyMessageToGame(sender, "action", party, msg);
+            mirc.partyMessageToIRC(sender, "action", party, msg);
+            return true;
         } else if(pp.getAdminChatMode()) {
             mirc.adminMessageToGame(sender, "action", msg);
             mirc.adminMessageToIRC(sender, "action", msg);

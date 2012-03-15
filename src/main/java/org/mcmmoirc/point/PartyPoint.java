@@ -31,6 +31,13 @@ public class PartyPoint implements EndPoint
     private String tag;
     private String party;
     
+    public PartyPoint()
+    {
+        this.mirc  = null;
+        this.tag   = null;
+        this.party = null;
+    }
+    
     public PartyPoint(mcMMOIRC mirc, String tag, String party)
     {
         this.mirc  = mirc;
@@ -55,6 +62,9 @@ public class PartyPoint implements EndPoint
     
     public void messageIn(RelayedMessage msg)
     {
+        if(party == null)
+            return;
+        
         mirc.partyMessageToGame(msg, party);
     }
     
