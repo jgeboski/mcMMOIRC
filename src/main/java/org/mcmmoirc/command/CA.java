@@ -57,8 +57,7 @@ public class CA implements CommandExecutor
         for(msg = args[0], i = 1; i < args.length; i++)
             msg = msg.concat(" " + args[i]);
         
-        mirc.adminMessageToGame(sender, "chat", msg);
-        mirc.adminMessageToIRC(sender, "chat", msg);
+        mirc.adminMessage(sender, "chat", msg);
         return true;
     }
 }

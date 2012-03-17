@@ -70,8 +70,7 @@ public class CP implements CommandExecutor
         for(msg = args[i], i++; i < args.length; i++)
             msg = msg.concat(" " + args[i]);
         
-        mirc.partyMessageToGame(sender, "chat", party, msg);
-        mirc.partyMessageToIRC(sender, "chat", party, msg);
+        mirc.partyMessage(sender, "chat", party, msg);
         return true;
     }
 }

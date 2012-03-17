@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.PluginManager;
 
 import com.gmail.nossr50.datatypes.PlayerProfile;
@@ -48,7 +49,7 @@ public class EventListener implements Listener
     public void onPlayerChat(PlayerChatEvent e)
     {
         PlayerProfile pp;
-        String party, msg;
+        String msg, party;
         Player p;
         
         p   = e.getPlayer();
@@ -57,15 +58,36 @@ public class EventListener implements Listener
         
         if(pp.getPartyChatMode()) {
             party = pp.getParty();
+            mirc.partyMessage(p, "chat", party, msg);
             e.setCancelled(true);
-            
-            mirc.partyMessageToGame(p, "chat", party, msg);
-            mirc.partyMessageToIRC(p, "chat", party, msg);
         } else if(pp.getAdminChatMode()) {
+            mirc.adminMessage(p, "chat", msg);
             e.setCancelled(true);
-            
-            mirc.adminMessageToGame(p, "chat", msg);
-            mirc.adminMessageToIRC(p, "chat", msg);
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent e)
+    {
+        PlayerProfile pp;
+        String msg[], party;
+        Player p;
+        
+        msg = e.getMessage().split(" ", 2);
+        
+        if((msg.length < 2) || !msg[0].equalsIgnoreCase("/me"))
+            return;
+        
+        p   = e.getPlayer();
+        pp  = Users.getProfile(p);
+        
+        if(pp.getPartyChatMode()) {
+            party = pp.getParty();
+            mirc.partyMessage(p, "action", party, msg[1]);
+            e.setCancelled(true);
+        } else if(pp.getAdminChatMode()) {
+            mirc.adminMessage(p, "action", msg[1]);
+            e.setCancelled(true);
         }
     }
 }

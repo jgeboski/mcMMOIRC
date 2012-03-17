@@ -231,8 +231,21 @@ public class mcMMOIRC extends JavaPlugin
         return false;
     }
     
+        /**
+     * Send a message to the in game admin chat and the admin channel tag
+     * 
+     * @param sender  A CommandSender
+     * @param event   A String containing a CraftIRC event
+     * @param msg     The message to send
+     **/
+    public void adminMessage(CommandSender sender, String event, String msg)
+    {
+        adminMessageToGame(sender, event, msg);
+        adminMessageToIRC(sender, event, msg);
+    }
+    
     /**
-     * Send a message to admin chat in game
+     * Send a message to the in game admin chat
      * 
      * @param rmsg  The RelayedMessage to send
      **/
@@ -282,6 +295,21 @@ public class mcMMOIRC extends JavaPlugin
         rmsg = fillMessage(rmsg, sender, msg);
         
         rmsg.post();
+    }
+    
+    /**
+     * Send a message to an in game party chat and the party channel tag
+     * 
+     * @param sender  A CommandSender
+     * @param event   A String containing a CraftIRC event
+     * @param party   A String containing the party name
+     * @param msg     The message to send
+     **/
+    public void partyMessage(CommandSender sender, String event,
+                             String party, String msg)
+    {
+        partyMessageToGame(sender, event, party, msg);
+        partyMessageToIRC(sender, event, party, msg);
     }
     
     /**
@@ -338,7 +366,7 @@ public class mcMMOIRC extends JavaPlugin
     }
     
     /**
-     * Send a message to a party channel 
+     * Send a message to a party channel tag
      * 
      * @param sender  A CommandSender
      * @param event   A String containing a CraftIRC event
