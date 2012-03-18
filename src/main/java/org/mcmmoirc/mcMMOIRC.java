@@ -39,7 +39,6 @@ import com.gmail.nossr50.Users;
 
 import org.mcmmoirc.command.CA;
 import org.mcmmoirc.command.CIRCReload;
-import org.mcmmoirc.command.CmcMMOIRC;
 import org.mcmmoirc.command.CP;
 import org.mcmmoirc.point.AdminPoint;
 import org.mcmmoirc.point.DefaultPoint;
@@ -121,9 +120,6 @@ public class mcMMOIRC extends JavaPlugin
         command   = getServer().getPluginCommand("p");
         partyExec = command.getExecutor();
         command.setExecutor(new CP(this));
-        
-        getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
-        events.register();
     }
     
     public void onDisable()
@@ -177,6 +173,7 @@ public class mcMMOIRC extends JavaPlugin
     
     public void reload(CommandSender sender)
     {
+        reload();
         Message.info(sender, "Successfully reloaded");
     }
     

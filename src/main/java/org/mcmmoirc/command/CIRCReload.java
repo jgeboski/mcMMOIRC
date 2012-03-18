@@ -40,8 +40,8 @@ public class CIRCReload implements CommandExecutor
         if(!mirc.hasPermissionM(sender, "craftirc.ircreload"))
             return true;
         
-        mirc.reload(sender);
         mirc.ircrExec.onCommand(sender, command, label, args);
+        mirc.reload(sender);
         
         return true;
     }
