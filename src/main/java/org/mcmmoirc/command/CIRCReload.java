@@ -22,13 +22,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import org.mcmmoirc.mcMMOIRC;
-import org.mcmmoirc.Message;
 
-public class CmcMMOIRC implements CommandExecutor
+public class CIRCReload implements CommandExecutor
 {
     protected mcMMOIRC mirc;
     
-    public CmcMMOIRC(mcMMOIRC mirc)
+    public CIRCReload(mcMMOIRC mirc)
     {
         this.mirc = mirc;
     }
@@ -38,20 +37,11 @@ public class CmcMMOIRC implements CommandExecutor
     {
         String cmd;
         
-        if(!mirc.hasPermissionM(sender, "mcmmoirc.reload"))
+        if(!mirc.hasPermissionM(sender, "craftirc.ircreload"))
             return true;
         
-        if(args.length < 1) {
-            Message.info(sender, command.getUsage());
-            return true;
-        }
-        
-        cmd = args[0].toLowerCase();
-        
-        if(cmd.matches("reload|rel"))
-            mirc.reload(sender);
-        else
-            Message.info(sender, command.getUsage());
+        mirc.reload(sender);
+        mirc.ircrExec.onCommand(sender, command, label, args);
         
         return true;
     }

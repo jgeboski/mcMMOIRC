@@ -38,6 +38,7 @@ import com.gmail.nossr50.mcPermissions;
 import com.gmail.nossr50.Users;
 
 import org.mcmmoirc.command.CA;
+import org.mcmmoirc.command.CIRCReload;
 import org.mcmmoirc.command.CmcMMOIRC;
 import org.mcmmoirc.command.CP;
 import org.mcmmoirc.point.AdminPoint;
@@ -58,6 +59,7 @@ public class mcMMOIRC extends JavaPlugin
     public HashMap<String, PartyPoint> partyPoints;
     
     public CommandExecutor adminExec;
+    public CommandExecutor ircrExec;
     public CommandExecutor partyExec;
     
     private EventListener events;
@@ -112,6 +114,10 @@ public class mcMMOIRC extends JavaPlugin
         adminExec = command.getExecutor();
         command.setExecutor(new CA(this));
         
+        command  = getServer().getPluginCommand("ircreload");
+        ircrExec = command.getExecutor();
+        command.setExecutor(new CIRCReload(this));
+        
         command   = getServer().getPluginCommand("p");
         partyExec = command.getExecutor();
         command.setExecutor(new CP(this));
@@ -126,6 +132,9 @@ public class mcMMOIRC extends JavaPlugin
         
         command = getServer().getPluginCommand("a");
         command.setExecutor(adminExec);
+        
+        command = getServer().getPluginCommand("ircreload");
+        command.setExecutor(ircrExec);
         
         command = getServer().getPluginCommand("p");
         command.setExecutor(partyExec);
@@ -164,6 +173,11 @@ public class mcMMOIRC extends JavaPlugin
             if(registerEndPoint(tag, partyp))
                 partyPoints.put(party, partyp);
         }
+    }
+    
+    public void reload(CommandSender sender)
+    {
+        Message.info(sender, "Successfully reloaded");
     }
     
     private boolean registerEndPoint(String tag, EndPoint ep)
