@@ -120,6 +120,8 @@ public class mcMMOIRC extends JavaPlugin
         command   = getServer().getPluginCommand("p");
         partyExec = command.getExecutor();
         command.setExecutor(new CP(this));
+        
+        events.register();
     }
     
     public void onDisable()
