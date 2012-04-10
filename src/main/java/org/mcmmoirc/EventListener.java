@@ -45,7 +45,7 @@ public class EventListener implements Listener
         pm.registerEvents(this, mirc);
     }
     
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerChat(PlayerChatEvent e)
     {
         PlayerProfile pp;
