@@ -77,7 +77,6 @@ public class Configuration extends YamlConfiguration
     {
         ArrayList<Map<String, String>> cparties;
         Map<String, String> cparty;
-        String party, tag;
         
         set("tags.admin",   adminTag);
         set("tags.default", defaultTag);
