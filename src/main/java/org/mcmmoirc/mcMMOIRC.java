@@ -253,8 +253,20 @@ public class mcMMOIRC extends JavaPlugin
      **/
     public void adminMessage(CommandSender sender, String event, String msg)
     {
+        String name;
+        
         adminMessageToGame(sender, event, msg);
         adminMessageToIRC(sender, event, msg);
+        
+        if(!config.adminLog)
+            return;
+        
+        if(sender instanceof Player)
+            name = ((Player) sender).getDisplayName();
+        else
+            name = sender.getName();
+        
+        Log.rinfo("[A] <%s> %s", name, msg);
     }
     
     /**
@@ -321,8 +333,20 @@ public class mcMMOIRC extends JavaPlugin
     public void partyMessage(CommandSender sender, String event,
                              String party, String msg)
     {
+        String name;
+        
         partyMessageToGame(sender, event, party, msg);
         partyMessageToIRC(sender, event, party, msg);
+        
+        if(!config.partyLog)
+            return;
+        
+        if(sender instanceof Player)
+            name = ((Player) sender).getDisplayName();
+        else
+            name = sender.getName();
+        
+        Log.rinfo("[P] (%s) <%s> %s", party, name, msg);
     }
     
     /**

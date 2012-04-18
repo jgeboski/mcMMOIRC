@@ -32,6 +32,11 @@ public class Log
         return msg;
     }
     
+    private static String rformat(String msg, Object ... args)
+    {
+        return ChatColor.stripColor(String.format(msg, args));
+    }
+    
     /**
      * Log an INFO message prefixed with the plugin name
      * 
@@ -41,6 +46,17 @@ public class Log
     public static void info(String format, Object ... args)
     {
         log.info(format(format, args));
+    }
+    
+    /**
+     * Log a raw INFO message prefixed with the plugin name
+     * 
+     * @param format  A format string
+     * @param args    Arguments corresponding to @param format
+     **/
+    public static void rinfo(String format, Object ... args)
+    {
+        log.info(rformat(format, args));
     }
     
     /**
