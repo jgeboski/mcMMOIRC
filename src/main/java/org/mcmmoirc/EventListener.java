@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.PluginManager;
 
 import com.gmail.nossr50.datatypes.PlayerProfile;
-import com.gmail.nossr50.Users;
+import com.gmail.nossr50.util.Users;
 
 public class EventListener implements Listener
 {

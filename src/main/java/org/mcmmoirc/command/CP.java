@@ -23,8 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.nossr50.datatypes.PlayerProfile;
-import com.gmail.nossr50.mcPermissions;
-import com.gmail.nossr50.Users;
+import com.gmail.nossr50.util.Permissions;
+import com.gmail.nossr50.util.Users;
 
 import org.mcmmoirc.mcMMOIRC;
 
@@ -54,7 +54,7 @@ public class CP implements CommandExecutor
             p  = (Player) sender;
             pp = Users.getProfile(p);
             
-            if(!mcPermissions.getInstance().party(p) || !pp.inParty())
+            if(!Permissions.getInstance().party(p) || !pp.inParty())
                 return true;
             
             i     = 0;

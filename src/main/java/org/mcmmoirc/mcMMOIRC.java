@@ -34,8 +34,8 @@ import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
 import com.gmail.nossr50.datatypes.PlayerProfile;
-import com.gmail.nossr50.mcPermissions;
-import com.gmail.nossr50.Users;
+import com.gmail.nossr50.util.Permissions;
+import com.gmail.nossr50.util.Users;
 
 import org.mcmmoirc.command.CA;
 import org.mcmmoirc.command.CIRCReload;
@@ -281,7 +281,7 @@ public class mcMMOIRC extends JavaPlugin
         msg = rmsg.getMessage(adminPoint);
         
         for(Player p : getServer().getOnlinePlayers()) {
-            if(mcPermissions.getInstance().adminChat(p) || p.isOp())
+            if(Permissions.getInstance().adminChat(p) || p.isOp())
                 p.sendMessage(msg);
         }
     }
