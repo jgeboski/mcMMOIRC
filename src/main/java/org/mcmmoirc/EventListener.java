@@ -57,7 +57,7 @@ public class EventListener implements Listener
         msg = e.getMessage();
         
         if(pp.getPartyChatMode()) {
-            party = pp.getParty();
+            party = pp.getParty().getName();
             mirc.partyMessage(p, "chat", party, msg);
             e.setCancelled(true);
         } else if(pp.getAdminChatMode()) {
@@ -82,7 +82,7 @@ public class EventListener implements Listener
         pp  = Users.getProfile(p);
         
         if(pp.getPartyChatMode()) {
-            party = pp.getParty();
+            party = pp.getParty().getName();
             mirc.partyMessage(p, "action", party, msg[1]);
             e.setCancelled(true);
         } else if(pp.getAdminChatMode()) {

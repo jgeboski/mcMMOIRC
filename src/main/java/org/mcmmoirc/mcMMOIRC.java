@@ -372,7 +372,7 @@ public class mcMMOIRC extends JavaPlugin
         for(Player p : getServer().getOnlinePlayers()) {
             pp = Users.getProfile(p);
             
-            if(party.equals(pp.getParty()))
+            if(party.equals(pp.getParty().getName()))
                 p.sendMessage(msg);
         }
     }

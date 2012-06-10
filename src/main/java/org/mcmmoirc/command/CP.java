@@ -58,7 +58,7 @@ public class CP implements CommandExecutor
                 return true;
             
             i     = 0;
-            party = pp.getParty();
+            party = pp.getParty().getName();
         } else {
             if(args.length < 2)
                 return true;
