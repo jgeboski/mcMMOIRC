@@ -34,6 +34,7 @@ import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
 import com.gmail.nossr50.datatypes.PlayerProfile;
+import com.gmail.nossr50.party.PartyManager;
 import com.gmail.nossr50.util.Permissions;
 import com.gmail.nossr50.util.Users;
 
@@ -357,7 +358,6 @@ public class mcMMOIRC extends JavaPlugin
      **/
     public void partyMessageToGame(RelayedMessage rmsg, String party)
     {
-        PlayerProfile pp;
         GamePoint gp;
         String msg;
         
@@ -366,15 +366,11 @@ public class mcMMOIRC extends JavaPlugin
         if(gp == null)
             gp = partyPoint;
         
-        msg = rmsg.getMessage(gp);
         rmsg.setField("srcParty", party);
+        msg = rmsg.getMessage(gp);
         
-        for(Player p : getServer().getOnlinePlayers()) {
-            pp = Users.getProfile(p);
-            
-            if(party.equals(pp.getParty().getName()))
-                p.sendMessage(msg);
-        }
+        for(Player p : PartyManager.getInstance().getOnlineMembers(party))
+            p.sendMessage(msg);
     }
     
     /**
@@ -389,14 +385,8 @@ public class mcMMOIRC extends JavaPlugin
                                    String party, String msg)
     {
         RelayedMessage rmsg;
-        GamePoint gp;
         
-        gp = partyPoints.get(party);
-        
-        if(gp == null)
-            gp = partyPoint;
-        
-        rmsg = craftirc.newMsg(defaultPoint, gp, event);
+        rmsg = craftirc.newMsg(defaultPoint, null, event);
         rmsg = fillMessage(rmsg, sender, msg);
         
         partyMessageToGame(rmsg, party);

@@ -26,6 +26,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.PluginManager;
 
 import com.gmail.nossr50.datatypes.PlayerProfile;
+import com.gmail.nossr50.party.Party;
 import com.gmail.nossr50.util.Users;
 
 public class EventListener implements Listener
@@ -57,7 +58,11 @@ public class EventListener implements Listener
         msg = e.getMessage();
         
         if(pp.getPartyChatMode()) {
+            if(!pp.inParty())
+                return;
+            
             party = pp.getParty().getName();
+            
             mirc.partyMessage(p, "chat", party, msg);
             e.setCancelled(true);
         } else if(pp.getAdminChatMode()) {
@@ -82,7 +87,11 @@ public class EventListener implements Listener
         pp  = Users.getProfile(p);
         
         if(pp.getPartyChatMode()) {
+            if(!pp.inParty())
+                return;
+            
             party = pp.getParty().getName();
+            
             mirc.partyMessage(p, "action", party, msg[1]);
             e.setCancelled(true);
         } else if(pp.getAdminChatMode()) {
