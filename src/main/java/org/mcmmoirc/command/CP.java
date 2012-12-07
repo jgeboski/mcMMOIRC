@@ -45,29 +45,29 @@ public class CP implements CommandExecutor
         Player p;
         int i;
 
-        if(args.length < 1) {
+        if (args.length < 1) {
             mirc.partyExec.onCommand(sender, command, label, new String[0]);
             return true;
         }
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             p  = (Player) sender;
             pp = Users.getProfile(p);
 
-            if(!Permissions.getInstance().party(p) || !pp.inParty())
+            if (!Permissions.getInstance().party(p) || !pp.inParty())
                 return true;
 
             i     = 0;
             party = pp.getParty().getName();
         } else {
-            if(args.length < 2)
+            if (args.length < 2)
                 return true;
 
             i     = 1;
             party = args[0];
         }
 
-        for(msg = args[i], i++; i < args.length; i++)
+        for (msg = args[i], i++; i < args.length; i++)
             msg = msg.concat(" " + args[i]);
 
         mirc.partyMessage(sender, "chat", party, msg);

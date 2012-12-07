@@ -42,19 +42,19 @@ public class CA implements CommandExecutor
         Player p;
         int i;
 
-        if(args.length < 1) {
+        if (args.length < 1) {
             mirc.adminExec.onCommand(sender, command, label, new String[0]);
             return true;
         }
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             p = (Player) sender;
 
-            if(!Permissions.getInstance().adminChat(p) && !p.isOp())
+            if (!Permissions.getInstance().adminChat(p) && !p.isOp())
                 return true;
         }
 
-        for(msg = args[0], i = 1; i < args.length; i++)
+        for (msg = args[0], i = 1; i < args.length; i++)
             msg = msg.concat(" " + args[i]);
 
         mirc.adminMessage(sender, "chat", msg);

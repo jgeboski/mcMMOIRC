@@ -57,15 +57,15 @@ public class EventListener implements Listener
         pp  = Users.getProfile(p);
         msg = e.getMessage();
 
-        if(pp.getPartyChatMode()) {
-            if(!pp.inParty())
+        if (pp.getPartyChatMode()) {
+            if (!pp.inParty())
                 return;
 
             party = pp.getParty().getName();
 
             mirc.partyMessage(p, "chat", party, msg);
             e.setCancelled(true);
-        } else if(pp.getAdminChatMode()) {
+        } else if (pp.getAdminChatMode()) {
             mirc.adminMessage(p, "chat", msg);
             e.setCancelled(true);
         }
@@ -80,21 +80,21 @@ public class EventListener implements Listener
 
         msg = e.getMessage().split(" ", 2);
 
-        if((msg.length < 2) || !msg[0].equalsIgnoreCase("/me"))
+        if ((msg.length < 2) || !msg[0].equalsIgnoreCase("/me"))
             return;
 
         p   = e.getPlayer();
         pp  = Users.getProfile(p);
 
-        if(pp.getPartyChatMode()) {
-            if(!pp.inParty())
+        if (pp.getPartyChatMode()) {
+            if (!pp.inParty())
                 return;
 
             party = pp.getParty().getName();
 
             mirc.partyMessage(p, "action", party, msg[1]);
             e.setCancelled(true);
-        } else if(pp.getAdminChatMode()) {
+        } else if (pp.getAdminChatMode()) {
             mirc.adminMessage(p, "action", msg[1]);
             e.setCancelled(true);
         }

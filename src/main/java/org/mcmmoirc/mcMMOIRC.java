@@ -90,7 +90,7 @@ public class mcMMOIRC extends JavaPlugin
         pm     = getServer().getPluginManager();
         plugin = pm.getPlugin("CraftIRC");
 
-        if(plugin == null) {
+        if (plugin == null) {
             Log.severe("Unable to find CraftIRC");
             return;
         }
@@ -101,12 +101,12 @@ public class mcMMOIRC extends JavaPlugin
         registerEndPoint(config.defaultTag, defaultPoint);
         registerEndPoint(config.partyTag,   partyPoint);
 
-        for(Entry<String, String> e : config.parties.entrySet()) {
+        for (Entry<String, String> e : config.parties.entrySet()) {
             party  = e.getKey();
             tag    = e.getValue();
             partyp = new PartyPoint(this, tag, party);
 
-            if(registerEndPoint(tag, partyp))
+            if (registerEndPoint(tag, partyp))
                 partyPoints.put(party, partyp);
         }
 
@@ -114,8 +114,8 @@ public class mcMMOIRC extends JavaPlugin
         adminExec = command.getExecutor();
         command.setExecutor(new CA(this));
 
-        command  = getServer().getPluginCommand("ircreload");
-        ircrExec = command.getExecutor();
+        command   = getServer().getPluginCommand("ircreload");
+        ircrExec  = command.getExecutor();
         command.setExecutor(new CIRCReload(this));
 
         command   = getServer().getPluginCommand("p");
@@ -142,7 +142,7 @@ public class mcMMOIRC extends JavaPlugin
         craftirc.unregisterEndPoint(config.defaultTag);
         craftirc.unregisterEndPoint(config.partyTag);
 
-        for(PartyPoint v : partyPoints.values())
+        for (PartyPoint v : partyPoints.values())
             craftirc.unregisterEndPoint(v.getTag());
     }
 
@@ -155,7 +155,7 @@ public class mcMMOIRC extends JavaPlugin
         craftirc.unregisterEndPoint(config.defaultTag);
         craftirc.unregisterEndPoint(config.partyTag);
 
-        for(PartyPoint v : partyPoints.values())
+        for (PartyPoint v : partyPoints.values())
             craftirc.unregisterEndPoint(v.getTag());
 
         config.load();
@@ -164,12 +164,12 @@ public class mcMMOIRC extends JavaPlugin
         registerEndPoint(config.defaultTag, defaultPoint);
         registerEndPoint(config.partyTag,   partyPoint);
 
-        for(Entry<String, String> e : config.parties.entrySet()) {
+        for (Entry<String, String> e : config.parties.entrySet()) {
             party  = e.getKey();
             tag    = e.getValue();
             partyp = new PartyPoint(this, tag, party);
 
-            if(registerEndPoint(tag, partyp))
+            if (registerEndPoint(tag, partyp))
                 partyPoints.put(party, partyp);
         }
     }
@@ -182,7 +182,7 @@ public class mcMMOIRC extends JavaPlugin
 
     private boolean registerEndPoint(String tag, EndPoint ep)
     {
-        if(craftirc.registerEndPoint(tag, ep))
+        if (craftirc.registerEndPoint(tag, ep))
             return true;
 
         Log.severe("Unable to register CraftIRC tag: %s", tag);
@@ -194,7 +194,7 @@ public class mcMMOIRC extends JavaPlugin
     {
         Player p;
 
-        if(sender instanceof Player) {
+        if (sender instanceof Player) {
             p = (Player) sender;
 
             rmsg.setField("realSender", p.getName());
@@ -219,7 +219,7 @@ public class mcMMOIRC extends JavaPlugin
      **/
     public boolean hasPermission(CommandSender sender, String perm)
     {
-        if(!(sender instanceof Player))
+        if (!(sender instanceof Player))
             return true;
 
         return ((Player) sender).hasPermission(perm);
@@ -238,7 +238,7 @@ public class mcMMOIRC extends JavaPlugin
      **/
     public boolean hasPermissionM(CommandSender sender, String perm)
     {
-        if(hasPermission(sender, perm))
+        if (hasPermission(sender, perm))
             return true;
 
         Message.severe(sender, "You don't have permission for that");
@@ -259,10 +259,10 @@ public class mcMMOIRC extends JavaPlugin
         adminMessageToGame(sender, event, msg);
         adminMessageToIRC(sender, event, msg);
 
-        if(!config.adminLog)
+        if (!config.adminLog)
             return;
 
-        if(sender instanceof Player)
+        if (sender instanceof Player)
             name = ((Player) sender).getDisplayName();
         else
             name = sender.getName();
@@ -281,8 +281,8 @@ public class mcMMOIRC extends JavaPlugin
 
         msg = rmsg.getMessage(adminPoint);
 
-        for(Player p : getServer().getOnlinePlayers()) {
-            if(Permissions.getInstance().adminChat(p) || p.isOp())
+        for (Player p : getServer().getOnlinePlayers()) {
+            if (Permissions.getInstance().adminChat(p) || p.isOp())
                 p.sendMessage(msg);
         }
     }
@@ -339,10 +339,10 @@ public class mcMMOIRC extends JavaPlugin
         partyMessageToGame(sender, event, party, msg);
         partyMessageToIRC(sender, event, party, msg);
 
-        if(!config.partyLog)
+        if (!config.partyLog)
             return;
 
-        if(sender instanceof Player)
+        if (sender instanceof Player)
             name = ((Player) sender).getDisplayName();
         else
             name = sender.getName();
@@ -363,13 +363,13 @@ public class mcMMOIRC extends JavaPlugin
 
         gp = partyPoints.get(party);
 
-        if(gp == null)
+        if (gp == null)
             gp = partyPoint;
 
         rmsg.setField("srcParty", party);
         msg = rmsg.getMessage(gp);
 
-        for(Player p : PartyManager.getInstance().getOnlineMembers(party))
+        for (Player p : PartyManager.getInstance().getOnlineMembers(party))
             p.sendMessage(msg);
     }
 
@@ -408,7 +408,7 @@ public class mcMMOIRC extends JavaPlugin
 
         gp = partyPoints.get(party);
 
-        if(gp == null)
+        if (gp == null)
             gp = partyPoint;
 
         rmsg = craftirc.newMsg(gp, null, event);

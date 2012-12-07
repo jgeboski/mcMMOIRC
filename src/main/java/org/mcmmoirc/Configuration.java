@@ -58,7 +58,7 @@ public class Configuration extends YamlConfiguration
 
         try {
             super.load(file);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.warning("Unable to load: %s", file.toString());
         }
 
@@ -69,17 +69,17 @@ public class Configuration extends YamlConfiguration
         defaultTag = getString("tags.default", defaultTag);
         partyTag   = getString("tags.party",   partyTag);
 
-        for(Map<?, ?> m : getMapList("parties")) {
+        for (Map<?, ?> m : getMapList("parties")) {
             party = (String) m.get("name");
             tag   = (String) m.get("tag");
 
-            if((party == null) || (tag == null))
+            if ((party == null) || (tag == null))
                 continue;
 
             parties.put(party, tag);
         }
 
-        if(!file.exists())
+        if (!file.exists())
             save();
     }
 
@@ -97,7 +97,7 @@ public class Configuration extends YamlConfiguration
 
         cparties = new ArrayList<Map<String, String>>();
 
-        for(Entry<String, String> e : parties.entrySet()) {
+        for (Entry<String, String> e : parties.entrySet()) {
             cparty = new HashMap<String, String>();
             cparty.put("name", e.getKey());
             cparty.put("tag",  e.getValue());
@@ -109,7 +109,7 @@ public class Configuration extends YamlConfiguration
 
         try {
             super.save(file);
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.warning("Unable to save: %s", file.toString());
         }
     }
