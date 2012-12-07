@@ -50,8 +50,9 @@ public class EventListener implements Listener
     public void onPlayerChat(AsyncPlayerChatEvent e)
     {
         PlayerProfile pp;
-        String msg, party;
-        Player p;
+        String        msg;
+        String        party;
+        Player        p;
 
         p   = e.getPlayer();
         pp  = Users.getProfile(p);
@@ -75,16 +76,17 @@ public class EventListener implements Listener
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent e)
     {
         PlayerProfile pp;
-        String msg[], party;
-        Player p;
+        String        msg[];
+        String        party;
+        Player        p;
 
         msg = e.getMessage().split(" ", 2);
 
         if ((msg.length < 2) || !msg[0].equalsIgnoreCase("/me"))
             return;
 
-        p   = e.getPlayer();
-        pp  = Users.getProfile(p);
+        p  = e.getPlayer();
+        pp = Users.getProfile(p);
 
         if (pp.getPartyChatMode()) {
             if (!pp.inParty())

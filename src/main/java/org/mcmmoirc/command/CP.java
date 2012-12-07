@@ -41,9 +41,10 @@ public class CP implements CommandExecutor
                              String label, String[] args)
     {
         PlayerProfile pp;
-        String msg, party;
-        Player p;
-        int i;
+        String        msg;
+        String        party;
+        Player        p;
+        int           i;
 
         if (args.length < 1) {
             mirc.partyExec.onCommand(sender, command, label, new String[0]);

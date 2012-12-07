@@ -40,7 +40,7 @@ public class CA implements CommandExecutor
     {
         String msg;
         Player p;
-        int i;
+        int    i;
 
         if (args.length < 1) {
             mirc.adminExec.onCommand(sender, command, label, new String[0]);

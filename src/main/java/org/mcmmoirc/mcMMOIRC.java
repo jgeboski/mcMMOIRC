@@ -51,11 +51,11 @@ public class mcMMOIRC extends JavaPlugin
     public static String pluginName = "mcMMOIRC";
 
     public Configuration config;
-    public CraftIRC craftirc;
+    public CraftIRC      craftirc;
 
-    public AdminPoint adminPoint;
+    public AdminPoint   adminPoint;
     public DefaultPoint defaultPoint;
-    public GamePoint partyPoint;
+    public GamePoint    partyPoint;
     public HashMap<String, PartyPoint> partyPoints;
 
     public CommandExecutor adminExec;
@@ -148,8 +148,9 @@ public class mcMMOIRC extends JavaPlugin
 
     public void reload()
     {
-        String party, tag;
         PartyPoint partyp;
+        String     party;
+        String     tag;
 
         craftirc.unregisterEndPoint(config.adminTag);
         craftirc.unregisterEndPoint(config.defaultTag);
@@ -359,7 +360,7 @@ public class mcMMOIRC extends JavaPlugin
     public void partyMessageToGame(RelayedMessage rmsg, String party)
     {
         GamePoint gp;
-        String msg;
+        String    msg;
 
         gp = partyPoints.get(party);
 
@@ -404,7 +405,7 @@ public class mcMMOIRC extends JavaPlugin
                                   String party, String msg)
     {
         RelayedMessage rmsg;
-        GamePoint gp;
+        GamePoint      gp;
 
         gp = partyPoints.get(party);
 
