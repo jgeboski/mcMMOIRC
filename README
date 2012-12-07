@@ -10,12 +10,12 @@ Example mcMMOIRC configuration:
 
 Example CraftIRC configuration:
   https://github.com/jgeboski/mcMMOIRC/blob/master/config.craftirc.yml
-  
+
 
 Commands:
   - /mcmmoirc reload:
       mcMMOIRC main command
-    
+
     aliases:
       mirc
 

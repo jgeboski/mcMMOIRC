@@ -16,27 +16,27 @@ settings:
   minecraft-tag: 'minecraft'
   cancelled-tag: 'cancelled'
   console-tag: 'console'
-  
+
   auto-paths: true
   minecraft-group-name: 'minecraft'
   irc-group-name: 'irc'
-  
+
   tag-groups:
-  
+
   cancel-chat: false
   command-prefix: '.'
-  
+
   irc-commands:
     say: ['say','mc']
     players: ['players']
     cmd: ['cmd','c']
-  
+
   debug: false
-  
+
   console-commands: ['reload', 'save-all']
   hold-after-enable: {chat: 0, joins: 0, quits: 0, kicks: 0, bans: 0}
   retry-delay: 10
-  
+
   formatting:
     from-game:
       chat: '(%sender%) %message%'
@@ -68,31 +68,31 @@ bots:
     userident: 'bot'
     serverpass: ''
     ssl: false
-    
+
     message-delay: 1000
     queue-size: 5
-    
+
     admin-prefixes: ['@', '%']
     ignored-users: []
-    
+
     auth:
       method: 'none'
       username: ''
       password: ''
-    
+
     on-connect:
-    
+
     channels:
       - name: '#adminchan'
         password: ''
         tag: 'adminchan'
         on-join:
-      
+
       - name: '#testchan'
         password: ''
         tag: 'testchan'
         on-join:
-    
+
     irc-nickname-map:
     use-map-as-whitelist: false
 
@@ -101,16 +101,16 @@ paths:
   #
   - source: 'adminchat'
     target: 'adminchan'
-    
+
     attributes:
       chat: true
       action: true
-  
+
   ## Admin Channel -> Admin Chat
   #
   - source: 'adminchan'
     target: 'adminchat'
-    
+
     attributes:
       chat: true
       private: true
@@ -121,7 +121,7 @@ paths:
       kick: true
       nick: true
       generic: true
-    
+
     # This will apply the default mcMMO formatting to all messages coming
     # from the Admin Chat channel
     formatting:
@@ -134,37 +134,37 @@ paths:
       kick: '%cyan%* %purple%%sender%%cyan% was kicked by %purple%%moderator%%cyan% (%message%)'
       nick: '%cyan%* %purple%%sender%%cyan% is now known as %purple%%message%'
       generic: '%cyan%%message%'
-  
+
   ## Default -> Admin Chat
   #
   # The formatting for messages sent to Admin Chat from in game
   - source: 'default'
     target: 'adminchat'
-    
+
     attributes:
       chat: true
       action: true
-    
+
     # Currently, only the "chat" formatting is needed
     formatting:
       chat: '%cyan%(%sender%%cyan%) %message%'
       action: '%cyan%* %sender%%cyan% %message%'
-  
-  
+
+
   ## Party 'test' Chat -> Party 'test' Channel
   #
   - source: 'testparty'
     target: 'testchan'
-    
+
     attributes:
       chat: true
       action: true
-  
+
   ## Party 'test' Channel -> Party 'test' Chat
   #
   - source: 'testchan'
     target: 'testparty'
-    
+
     attributes:
       chat: true
       private: true
@@ -175,7 +175,7 @@ paths:
       kick: true
       nick: true
       generic: true
-    
+
     # This will apply the default mcMMO formatting to all messages coming
     # from the Party 'test' channel
     formatting:
@@ -188,38 +188,38 @@ paths:
       kick: '%green%* %purple%%sender%%green% was kicked by %purple%%moderator%%green% (%message%)'
       nick: '%green%* %purple%%sender%%green% is now known as %purple%%message%'
       generic: '%green%%message%'
-  
+
   ## Default -> Party 'test' Chat
   #
   # The formatting for messages sent to Party 'test' Chat from in game
   - source: 'default'
     target: 'testparty'
-    
+
     attributes:
       chat: true
       action: true
-    
+
     formatting:
       chat: '%green%(%sender%%green%) %message%'
       action: '%green%* %sender%%green% %message%'
-  
+
   ## Default -> Party Chat
   #
   # The default formatting for messages sent to Party Chat from in game
   - source: 'default'
     target: 'partychat'
-    
+
     attributes:
       chat: true
       action: true
-    
+
     formatting:
       chat: '%green%(%sender%%green%>) %message%'
       action: '%green%* %sender%%green% %message%'
 
 default-attributes:
   disable: true
-  
+
   # For this example's sake, we'll leave everything disabled
   attributes:
     chat: false

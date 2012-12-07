@@ -16,10 +16,10 @@ logging:
 tags:
   # The tag that represents the Admin Chat
   admin: adminchat
-  
+
   # The default tag used for formatting
   default: default
-  
+
   # Default tag for parties; this can be used for custom formatting
   party: partychat
 

@@ -1,16 +1,16 @@
-/* 
+/*
  * Copyright 2012 James Geboski <jgeboski@gmail.com>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,22 +24,22 @@ import org.bukkit.ChatColor;
 public class Log
 {
     protected static final Logger log = Logger.getLogger("Minecraft");
-    
+
     private static String format(String msg, Object ... args)
     {
         msg = ChatColor.stripColor(String.format(msg, args));
         msg = String.format("[%s] %s", mcMMOIRC.pluginName, msg);
         return msg;
     }
-    
+
     private static String rformat(String msg, Object ... args)
     {
         return ChatColor.stripColor(String.format(msg, args));
     }
-    
+
     /**
      * Log an INFO message prefixed with the plugin name
-     * 
+     *
      * @param format  A format string
      * @param args    Arguments corresponding to @param format
      **/
@@ -47,10 +47,10 @@ public class Log
     {
         log.info(format(format, args));
     }
-    
+
     /**
      * Log a raw INFO message prefixed with the plugin name
-     * 
+     *
      * @param format  A format string
      * @param args    Arguments corresponding to @param format
      **/
@@ -58,10 +58,10 @@ public class Log
     {
         log.info(rformat(format, args));
     }
-    
+
     /**
      * Log a WARNING message prefixed with the plugin name
-     * 
+     *
      * @param format  A format string
      * @param args    Arguments corresponding to @param format
      **/
@@ -69,10 +69,10 @@ public class Log
     {
         log.warning(format(format, args));
     }
-    
+
     /**
      * Log a SEVERE message prefixed with the plugin name
-     * 
+     *
      * @param format  A format string
      * @param args    Arguments corresponding to @param format
      **/
