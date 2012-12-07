@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Configuration extends YamlConfiguration
@@ -54,6 +55,7 @@ public class Configuration extends YamlConfiguration
 
     public void load()
     {
+        ConfigurationSection cs;
         String party;
         String tag;
 
@@ -63,12 +65,14 @@ public class Configuration extends YamlConfiguration
             Log.warning("Unable to load: %s", file.toString());
         }
 
-        adminLog   = getBoolean("logging.admin", adminLog);
-        partyLog   = getBoolean("logging.party", partyLog);
+        cs         = getConfigurationSection("logging");
+        adminLog   = cs.getBoolean("admin", adminLog);
+        partyLog   = cs.getBoolean("party", partyLog);
 
-        adminTag   = getString("tags.admin",   adminTag);
-        defaultTag = getString("tags.default", defaultTag);
-        partyTag   = getString("tags.party",   partyTag);
+        cs         = getConfigurationSection("tags");
+        adminTag   = cs.getString("admin",   adminTag);
+        defaultTag = cs.getString("default", defaultTag);
+        partyTag   = cs.getString("party",   partyTag);
 
         for (Map<?, ?> m : getMapList("parties")) {
             party = (String) m.get("name");
@@ -89,12 +93,16 @@ public class Configuration extends YamlConfiguration
         ArrayList<Map<String, String>> cparties;
         Map<String, String>            cparty;
 
-        set("logging.admin", adminLog);
-        set("logging.party", partyLog);
+        ConfigurationSection cs;
 
-        set("tags.admin",   adminTag);
-        set("tags.default", defaultTag);
-        set("tags.party",   partyTag);
+        cs = getConfigurationSection("logging");
+        cs.set("admin", adminLog);
+        cs.set("party", partyLog);
+
+        cs = getConfigurationSection("tags");
+        cs.set("admin",   adminTag);
+        cs.set("default", defaultTag);
+        cs.set("party",   partyTag);
 
         cparties = new ArrayList<Map<String, String>>();
 
@@ -113,5 +121,17 @@ public class Configuration extends YamlConfiguration
         } catch (Exception e) {
             Log.warning("Unable to save: %s", file.toString());
         }
+    }
+
+    public ConfigurationSection getConfigurationSection(String path)
+    {
+        ConfigurationSection ret;
+
+        ret = super.getConfigurationSection(path);
+
+        if (ret == null)
+            ret = createSection(path);
+
+        return ret;
     }
 }
