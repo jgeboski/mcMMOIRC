@@ -209,20 +209,12 @@ public class mcMMOIRC extends JavaPlugin
         return rmsg;
     }
 
-    public boolean hasPermission(CommandSender sender, String perm)
-    {
-        if (!(sender instanceof Player))
-            return true;
-
-        return ((Player) sender).hasPermission(perm);
-    }
-
     public boolean hasPermissionM(CommandSender sender, String perm)
     {
-        if (hasPermission(sender, perm))
+        if (sender.hasPermission(perm))
             return true;
 
-        Message.severe(sender, "You don't have permission for that");
+        Message.severe(sender, "You don't have permission for that.");
         return false;
     }
 
