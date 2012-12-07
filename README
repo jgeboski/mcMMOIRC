@@ -13,12 +13,9 @@ Example CraftIRC configuration:
 
 
 Commands:
-  - /mcmmoirc reload:
-      mcMMOIRC main command
-
-    aliases:
-      mirc
+  - mcmmoirc - Manage mcMMOIRC
+    - Aliases: mirc
+    - Usage: /<command> reload
 
 Permissions:
-  - mcmmoirc.reload:
-      Reload mcMMOIRC
+  - mcmmoirc.reload - Reload mcMMOIRC
