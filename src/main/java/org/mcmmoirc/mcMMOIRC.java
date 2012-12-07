@@ -209,15 +209,6 @@ public class mcMMOIRC extends JavaPlugin
         return rmsg;
     }
 
-    /**
-     * Test if a CommandSender has a specific permission
-     *
-     * @param sender  A CommandSender
-     * @param perm    A String containing the permission node
-     *
-     * @return        TRUE if the player has permission,
-     *                otherwise FALSE
-     **/
     public boolean hasPermission(CommandSender sender, String perm)
     {
         if (!(sender instanceof Player))
@@ -226,17 +217,6 @@ public class mcMMOIRC extends JavaPlugin
         return ((Player) sender).hasPermission(perm);
     }
 
-    /**
-     * Test if a CommandSender has a specific permission.  If the
-     * permission does not exist, the player will receive a message
-     * informing them of their insufficient permissions.
-     *
-     * @param sender  A CommandSender
-     * @param perm    A String containing the permission node
-     *
-     * @return        TRUE if the player has permission,
-     *                otherwise FALSE
-     **/
     public boolean hasPermissionM(CommandSender sender, String perm)
     {
         if (hasPermission(sender, perm))
@@ -246,13 +226,6 @@ public class mcMMOIRC extends JavaPlugin
         return false;
     }
 
-        /**
-     * Send a message to the in game admin chat and the admin channel tag
-     *
-     * @param sender  A CommandSender
-     * @param event   A String containing a CraftIRC event
-     * @param msg     The message to send
-     **/
     public void adminMessage(CommandSender sender, String event, String msg)
     {
         String name;
@@ -271,11 +244,6 @@ public class mcMMOIRC extends JavaPlugin
         Log.rinfo("[A] <%s> %s", name, msg);
     }
 
-    /**
-     * Send a message to the in game admin chat
-     *
-     * @param rmsg  The RelayedMessage to send
-     **/
     public void adminMessageToGame(RelayedMessage rmsg)
     {
         String msg;
@@ -288,13 +256,6 @@ public class mcMMOIRC extends JavaPlugin
         }
     }
 
-    /**
-     * Send a message to admin chat in game
-     *
-     * @param sender  A CommandSender
-     * @param event   A String containing a CraftIRC event
-     * @param msg     The message to send
-     **/
     public void adminMessageToGame(CommandSender sender,
                                    String event, String msg)
     {
@@ -306,13 +267,6 @@ public class mcMMOIRC extends JavaPlugin
         adminMessageToGame(rmsg);
     }
 
-    /**
-     * Send a message to admin channel tag
-     *
-     * @param sender  A CommandSender
-     * @param event   A String containing a CraftIRC event
-     * @param msg     The message to send
-     **/
     public void adminMessageToIRC(CommandSender sender,
                                   String event, String msg)
     {
@@ -324,14 +278,6 @@ public class mcMMOIRC extends JavaPlugin
         rmsg.post();
     }
 
-    /**
-     * Send a message to an in game party chat and the party channel tag
-     *
-     * @param sender  A CommandSender
-     * @param event   A String containing a CraftIRC event
-     * @param party   A String containing the party name
-     * @param msg     The message to send
-     **/
     public void partyMessage(CommandSender sender, String event,
                              String party, String msg)
     {
@@ -351,12 +297,6 @@ public class mcMMOIRC extends JavaPlugin
         Log.rinfo("[P] (%s) <%s> %s", party, name, msg);
     }
 
-    /**
-     * Send a message to a party chat in game
-     *
-     * @param rmsg   The RelayedMessage to send
-     * @param party  A String containing the party name
-     **/
     public void partyMessageToGame(RelayedMessage rmsg, String party)
     {
         GamePoint gp;
@@ -374,14 +314,6 @@ public class mcMMOIRC extends JavaPlugin
             p.sendMessage(msg);
     }
 
-    /**
-     * Send a message to a party chat in game
-     *
-     * @param sender  A CommandSender
-     * @param event   A String containing a CraftIRC event
-     * @param party   A String containing the party name
-     * @param msg     The message to send
-     **/
     public void partyMessageToGame(CommandSender sender, String event,
                                    String party, String msg)
     {
@@ -393,14 +325,6 @@ public class mcMMOIRC extends JavaPlugin
         partyMessageToGame(rmsg, party);
     }
 
-    /**
-     * Send a message to a party channel tag
-     *
-     * @param sender  A CommandSender
-     * @param event   A String containing a CraftIRC event
-     * @param party   A String containing the party name
-     * @param msg     The message to send
-     **/
     public void partyMessageToIRC(CommandSender sender, String event,
                                   String party, String msg)
     {
