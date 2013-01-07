@@ -50,7 +50,7 @@ public class CA implements CommandExecutor
         if (sender instanceof Player) {
             p = (Player) sender;
 
-            if (!Permissions.getInstance().adminChat(p) && !p.isOp())
+            if (!Permissions.adminChat(p) && !p.isOp())
                 return true;
         }
 

@@ -55,7 +55,7 @@ public class CP implements CommandExecutor
             p  = (Player) sender;
             pp = Users.getProfile(p);
 
-            if (!Permissions.getInstance().party(p) || !pp.inParty())
+            if (!Permissions.party(p) || !pp.inParty())
                 return true;
 
             i     = 0;

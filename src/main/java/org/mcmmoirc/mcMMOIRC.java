@@ -243,7 +243,7 @@ public class mcMMOIRC extends JavaPlugin
         msg = rmsg.getMessage(adminPoint);
 
         for (Player p : getServer().getOnlinePlayers()) {
-            if (Permissions.getInstance().adminChat(p) || p.isOp())
+            if (Permissions.adminChat(p) || p.isOp())
                 p.sendMessage(msg);
         }
     }
