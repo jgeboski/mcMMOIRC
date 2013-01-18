@@ -26,6 +26,8 @@ import java.util.Map.Entry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import org.mcmmoirc.util.Log;
+
 public class Configuration extends YamlConfiguration
 {
     private File file;

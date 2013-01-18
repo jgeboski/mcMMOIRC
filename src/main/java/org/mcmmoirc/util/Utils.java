@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 James Geboski <jgeboski@gmail.com>
+ * Copyright 2013 James Geboski <jgeboski@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,35 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc.command;
+package org.mcmmoirc.util;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import org.mcmmoirc.mcMMOIRC;
-import org.mcmmoirc.util.Utils;
-
-public class CIRCReload implements CommandExecutor
+public class Utils
 {
-    protected mcMMOIRC mirc;
-
-    public CIRCReload(mcMMOIRC mirc)
+    public static boolean hasPermission(CommandSender sender, String perm,
+                                        boolean errmsg)
     {
-        this.mirc = mirc;
-    }
-
-    public boolean onCommand(CommandSender sender, Command command,
-                             String label, String[] args)
-    {
-        String cmd;
-
-        if (!Utils.hasPermission(sender, "craftirc.ircreload"))
+        if (sender.hasPermission(perm))
             return true;
 
-        mirc.ircrExec.onCommand(sender, command, label, args);
-        mirc.reload(sender);
+        if (errmsg)
+            Message.severe(sender, "You don't have permission for that.");
 
-        return true;
+        return false;
+    }
+
+    public static boolean hasPermission(CommandSender sender, String perm)
+    {
+        return hasPermission(sender, perm, true);
     }
 }

@@ -45,6 +45,8 @@ import org.mcmmoirc.point.AdminPoint;
 import org.mcmmoirc.point.DefaultPoint;
 import org.mcmmoirc.point.GamePoint;
 import org.mcmmoirc.point.PartyPoint;
+import org.mcmmoirc.util.Log;
+import org.mcmmoirc.util.Message;
 
 public class mcMMOIRC extends JavaPlugin
 {
@@ -207,15 +209,6 @@ public class mcMMOIRC extends JavaPlugin
 
         rmsg.setField("message", msg);
         return rmsg;
-    }
-
-    public boolean hasPermissionM(CommandSender sender, String perm)
-    {
-        if (sender.hasPermission(perm))
-            return true;
-
-        Message.severe(sender, "You don't have permission for that.");
-        return false;
     }
 
     public void adminMessage(CommandSender sender, String event, String msg)
