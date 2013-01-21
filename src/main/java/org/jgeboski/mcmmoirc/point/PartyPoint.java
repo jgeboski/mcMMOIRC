@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc.point;
+package org.jgeboski.mcmmoirc.point;
 
 import com.ensifera.animosity.craftirc.RelayedMessage;
 import com.gmail.nossr50.api.ChatAPI;
-import org.mcmmoirc.mcMMOIRC;
+import org.jgeboski.mcmmoirc.mcMMOIRC;
 
 public class PartyPoint extends GamePoint
 {

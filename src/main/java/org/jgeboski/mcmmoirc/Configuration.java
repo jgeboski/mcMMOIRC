@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc;
+package org.jgeboski.mcmmoirc;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.Map.Entry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import org.mcmmoirc.util.Log;
+import org.jgeboski.mcmmoirc.util.Log;
 
 public class Configuration extends YamlConfiguration
 {

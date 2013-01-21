@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc;
+package org.jgeboski.mcmmoirc;
 
 import java.io.File;
 import java.util.HashMap;
@@ -33,12 +33,12 @@ import com.ensifera.animosity.craftirc.CraftIRC;
 import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
-import org.mcmmoirc.command.CIRCReload;
-import org.mcmmoirc.point.AdminPoint;
-import org.mcmmoirc.point.GamePoint;
-import org.mcmmoirc.point.PartyPoint;
-import org.mcmmoirc.util.Log;
-import org.mcmmoirc.util.Message;
+import org.jgeboski.mcmmoirc.command.CIRCReload;
+import org.jgeboski.mcmmoirc.point.AdminPoint;
+import org.jgeboski.mcmmoirc.point.GamePoint;
+import org.jgeboski.mcmmoirc.point.PartyPoint;
+import org.jgeboski.mcmmoirc.util.Log;
+import org.jgeboski.mcmmoirc.util.Message;
 
 public class mcMMOIRC extends JavaPlugin
 {

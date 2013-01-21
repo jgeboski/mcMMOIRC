@@ -2,5 +2,5 @@ name: mcMMOIRC
 version: ${project.version}
 description: Integrate the mcMMO chat system with CraftIRC
 author: jgeboski
-main: org.mcmmoirc.mcMMOIRC
+main: org.jgeboski.mcmmoirc.mcMMOIRC
 depend: ['CraftIRC', 'mcMMO']

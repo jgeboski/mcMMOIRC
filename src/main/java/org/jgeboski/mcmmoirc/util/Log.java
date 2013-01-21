@@ -15,11 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc.util;
+package org.jgeboski.mcmmoirc.util;
 
 import java.util.logging.Logger;
 import org.bukkit.ChatColor;
-import org.mcmmoirc.mcMMOIRC;
+import org.jgeboski.mcmmoirc.mcMMOIRC;
 
 public class Log
 {

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc;
+package org.jgeboski.mcmmoirc;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

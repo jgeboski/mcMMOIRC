@@ -15,14 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc.point;
+package org.jgeboski.mcmmoirc.point;
 
 import java.util.List;
 
 import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
-import org.mcmmoirc.mcMMOIRC;
+import org.jgeboski.mcmmoirc.mcMMOIRC;
 
 public class GamePoint implements EndPoint
 {

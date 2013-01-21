@@ -15,15 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc.command;
+package org.jgeboski.mcmmoirc.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import org.mcmmoirc.mcMMOIRC;
-import org.mcmmoirc.util.Message;
-import org.mcmmoirc.util.Utils;
+import org.jgeboski.mcmmoirc.mcMMOIRC;
+import org.jgeboski.mcmmoirc.util.Message;
+import org.jgeboski.mcmmoirc.util.Utils;
 
 public class CIRCReload implements CommandExecutor
 {

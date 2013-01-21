@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 James Geboski <jgeboski@gmail.com>
+ * Copyright 2013 James Geboski <jgeboski@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,22 +15,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.mcmmoirc.point;
+package org.jgeboski.mcmmoirc.util;
 
-import com.ensifera.animosity.craftirc.RelayedMessage;
-import com.gmail.nossr50.api.ChatAPI;
-import org.mcmmoirc.mcMMOIRC;
+import org.bukkit.command.CommandSender;
 
-public class AdminPoint extends GamePoint
+public class Utils
 {
-    public AdminPoint(mcMMOIRC mirc)
+    public static boolean hasPermission(CommandSender sender, String perm,
+                                        boolean errmsg)
     {
-        super(mirc);
+        if (sender.hasPermission(perm))
+            return true;
+
+        if (errmsg)
+            Message.severe(sender, "You don't have permission for that.");
+
+        return false;
     }
 
-    public void messageIn(RelayedMessage msg)
+    public static boolean hasPermission(CommandSender sender, String perm)
     {
-        ChatAPI.sendAdminChat(mirc, msg.getField("sender"),
-                              msg.getField("message"));
+        return hasPermission(sender, perm, true);
     }
 }
