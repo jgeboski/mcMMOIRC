@@ -17,17 +17,14 @@
 
 package org.mcmmoirc;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import com.gmail.nossr50.datatypes.PlayerProfile;
-import com.gmail.nossr50.party.Party;
-import com.gmail.nossr50.util.Users;
+import com.gmail.nossr50.events.chat.McMMOAdminChatEvent;
+import com.gmail.nossr50.events.chat.McMMOPartyChatEvent;
 
 public class EventListener implements Listener
 {
@@ -47,58 +44,29 @@ public class EventListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    public void onPlayerChat(AsyncPlayerChatEvent e)
+    public void onPlayerChat(McMMOAdminChatEvent event)
     {
-        PlayerProfile pp;
-        String        msg;
-        String        party;
-        Player        p;
+        Plugin p;
 
-        p   = e.getPlayer();
-        pp  = Users.getProfile(p);
-        msg = e.getMessage();
+        p = event.getPlugin();
 
-        if (pp.getPartyChatMode()) {
-            if (!pp.inParty())
-                return;
-
-            party = pp.getParty().getName();
-
-            mirc.partyMessage(p, "chat", party, msg);
-            e.setCancelled(true);
-        } else if (pp.getAdminChatMode()) {
-            mirc.adminMessage(p, "chat", msg);
-            e.setCancelled(true);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent e)
-    {
-        PlayerProfile pp;
-        String        msg[];
-        String        party;
-        Player        p;
-
-        msg = e.getMessage().split(" ", 2);
-
-        if ((msg.length < 2) || !msg[0].equalsIgnoreCase("/me"))
+        if ((p != null) && (p instanceof mcMMOIRC))
             return;
 
-        p  = e.getPlayer();
-        pp = Users.getProfile(p);
+        mirc.adminMessageToIRC(event.getSender(), "chat", event.getMessage());
+    }
 
-        if (pp.getPartyChatMode()) {
-            if (!pp.inParty())
-                return;
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    public void onPlayerChat(McMMOPartyChatEvent event)
+    {
+        Plugin p;
 
-            party = pp.getParty().getName();
+        p = event.getPlugin();
 
-            mirc.partyMessage(p, "action", party, msg[1]);
-            e.setCancelled(true);
-        } else if (pp.getAdminChatMode()) {
-            mirc.adminMessage(p, "action", msg[1]);
-            e.setCancelled(true);
-        }
+        if ((p != null) && (p instanceof mcMMOIRC))
+            return;
+
+        mirc.partyMessageToIRC(event.getSender(), "chat", event.getParty(),
+                               event.getMessage());
     }
 }

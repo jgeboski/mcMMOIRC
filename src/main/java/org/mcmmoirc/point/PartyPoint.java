@@ -17,22 +17,19 @@
 
 package org.mcmmoirc.point;
 
-import java.util.List;
-
 import com.ensifera.animosity.craftirc.RelayedMessage;
-
+import com.gmail.nossr50.api.ChatAPI;
 import org.mcmmoirc.mcMMOIRC;
 
 public class PartyPoint extends GamePoint
 {
-    protected mcMMOIRC mirc;
-
     private String tag;
     private String party;
 
     public PartyPoint(mcMMOIRC mirc, String tag, String party)
     {
-        this.mirc  = mirc;
+        super(mirc);
+
         this.tag   = tag;
         this.party = party;
     }
@@ -49,6 +46,7 @@ public class PartyPoint extends GamePoint
 
     public void messageIn(RelayedMessage msg)
     {
-        mirc.partyMessageToGame(msg, party);
+        ChatAPI.sendPartyChat(mirc, msg.getField("sender"), party,
+                              msg.getField("message"));
     }
 }

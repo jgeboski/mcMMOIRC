@@ -22,6 +22,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import org.mcmmoirc.mcMMOIRC;
+import org.mcmmoirc.util.Message;
 import org.mcmmoirc.util.Utils;
 
 public class CIRCReload implements CommandExecutor
@@ -42,7 +43,10 @@ public class CIRCReload implements CommandExecutor
             return true;
 
         mirc.ircrExec.onCommand(sender, command, label, args);
-        mirc.reload(sender);
+        mirc.reload();
+
+        Message.info(sender, "Successfully reloaded %s",
+                     mirc.getDescription().getFullName());
 
         return true;
     }

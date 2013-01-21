@@ -22,8 +22,17 @@ import java.util.List;
 import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
+import org.mcmmoirc.mcMMOIRC;
+
 public class GamePoint implements EndPoint
 {
+    protected mcMMOIRC mirc;
+
+    public GamePoint(mcMMOIRC mirc)
+    {
+        this.mirc = mirc;
+    }
+
     public Type getType()
     {
         return Type.MINECRAFT;

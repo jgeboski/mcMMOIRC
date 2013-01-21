@@ -7,20 +7,12 @@
 # Example CraftIRC configuration:
 #   https://github.com/jgeboski/mcMMOIRC/blob/master/config.craftirc.yml
 
-# Admin/party chat logging
-logging:
-  admin: true
-  party: true
-
 # Declares the tags to be used in CraftIRC's configuration
 tags:
   # The tag that represents the Admin Chat
   admin: adminchat
 
-  # The default tag used for formatting
-  default: default
-
-  # Default tag for parties; this can be used for custom formatting
+  # Default tag for parties
   party: partychat
 
 # A list of parties to relay to CraftIRC

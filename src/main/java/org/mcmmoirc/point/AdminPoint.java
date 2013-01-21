@@ -17,23 +17,20 @@
 
 package org.mcmmoirc.point;
 
-import java.util.List;
-
 import com.ensifera.animosity.craftirc.RelayedMessage;
-
+import com.gmail.nossr50.api.ChatAPI;
 import org.mcmmoirc.mcMMOIRC;
 
 public class AdminPoint extends GamePoint
 {
-    protected mcMMOIRC mirc;
-
     public AdminPoint(mcMMOIRC mirc)
     {
-        this.mirc = mirc;
+        super(mirc);
     }
 
     public void messageIn(RelayedMessage msg)
     {
-        mirc.adminMessageToGame(msg);
+        ChatAPI.sendAdminChat(mirc, msg.getField("sender"),
+                              msg.getField("message"));
     }
 }

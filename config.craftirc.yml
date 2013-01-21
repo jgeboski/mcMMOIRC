@@ -106,51 +106,6 @@ paths:
       chat: true
       action: true
 
-  ## Admin Channel -> Admin Chat
-  #
-  - source: 'adminchan'
-    target: 'adminchat'
-
-    attributes:
-      chat: true
-      private: true
-      action: true
-      join: true
-      part: true
-      quit: true
-      kick: true
-      nick: true
-      generic: true
-
-    # This will apply the default mcMMO formatting to all messages coming
-    # from the Admin Chat channel
-    formatting:
-      chat: '%cyan%(%purple%%sender%%cyan%) %message%'
-      private: '%cyan%(%purple%%sender%%cyan%) %message%'
-      action: '%cyan%* %purple%%sender%%cyan% %message%'
-      join: '%cyan%* Joins: %purple%%sender%'
-      part: '%cyan%* Parts: %purple%%sender%'
-      quit: '%cyan%* Quits: %purple%%sender%'
-      kick: '%cyan%* %purple%%sender%%cyan% was kicked by %purple%%moderator%%cyan% (%message%)'
-      nick: '%cyan%* %purple%%sender%%cyan% is now known as %purple%%message%'
-      generic: '%cyan%%message%'
-
-  ## Default -> Admin Chat
-  #
-  # The formatting for messages sent to Admin Chat from in game
-  - source: 'default'
-    target: 'adminchat'
-
-    attributes:
-      chat: true
-      action: true
-
-    # Currently, only the "chat" formatting is needed
-    formatting:
-      chat: '%cyan%(%sender%%cyan%) %message%'
-      action: '%cyan%* %sender%%cyan% %message%'
-
-
   ## Party 'test' Chat -> Party 'test' Channel
   #
   - source: 'testparty'
@@ -159,63 +114,6 @@ paths:
     attributes:
       chat: true
       action: true
-
-  ## Party 'test' Channel -> Party 'test' Chat
-  #
-  - source: 'testchan'
-    target: 'testparty'
-
-    attributes:
-      chat: true
-      private: true
-      action: true
-      join: true
-      part: true
-      quit: true
-      kick: true
-      nick: true
-      generic: true
-
-    # This will apply the default mcMMO formatting to all messages coming
-    # from the Party 'test' channel
-    formatting:
-      chat: '%green%(%purple%%sender%%green%) %message%'
-      private: '%green%(%purple%%sender%%green%) %message%'
-      action: '%green%* %purple%%sender%%green% %message%'
-      join: '%green%* Joins: %purple%%sender%'
-      part: '%green%* Parts: %purple%%sender%'
-      quit: '%green%* Quits: %purple%%sender%'
-      kick: '%green%* %purple%%sender%%green% was kicked by %purple%%moderator%%green% (%message%)'
-      nick: '%green%* %purple%%sender%%green% is now known as %purple%%message%'
-      generic: '%green%%message%'
-
-  ## Default -> Party 'test' Chat
-  #
-  # The formatting for messages sent to Party 'test' Chat from in game
-  - source: 'default'
-    target: 'testparty'
-
-    attributes:
-      chat: true
-      action: true
-
-    formatting:
-      chat: '%green%(%sender%%green%) %message%'
-      action: '%green%* %sender%%green% %message%'
-
-  ## Default -> Party Chat
-  #
-  # The default formatting for messages sent to Party Chat from in game
-  - source: 'default'
-    target: 'partychat'
-
-    attributes:
-      chat: true
-      action: true
-
-    formatting:
-      chat: '%green%(%sender%%green%>) %message%'
-      action: '%green%* %sender%%green% %message%'
 
 default-attributes:
   disable: true

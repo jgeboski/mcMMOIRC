@@ -32,27 +32,19 @@ public class Configuration extends YamlConfiguration
 {
     private File file;
 
-    public boolean adminLog;
-    public boolean partyLog;
-
     public String adminTag;
-    public String defaultTag;
     public String partyTag;
 
     public HashMap<String, String> parties;
 
     public Configuration(File file)
     {
-        this.file  = file;
+        this.file = file;
 
-        adminLog   = true;
-        partyLog   = true;
+        adminTag  = "adminchat";
+        partyTag  = "partychat";
 
-        adminTag   = "adminchat";
-        defaultTag = "default";
-        partyTag   = "partychat";
-
-        parties    = new HashMap<String, String>();
+        parties   = new HashMap<String, String>();
     }
 
     public void load()
@@ -67,23 +59,16 @@ public class Configuration extends YamlConfiguration
             Log.warning("Unable to load: %s", file.toString());
         }
 
-        cs         = getConfigurationSection("logging");
-        adminLog   = cs.getBoolean("admin", adminLog);
-        partyLog   = cs.getBoolean("party", partyLog);
-
-        cs         = getConfigurationSection("tags");
-        adminTag   = cs.getString("admin",   adminTag);
-        defaultTag = cs.getString("default", defaultTag);
-        partyTag   = cs.getString("party",   partyTag);
+        cs       = getConfigurationSection("tags");
+        adminTag = cs.getString("admin", adminTag);
+        partyTag = cs.getString("party", partyTag);
 
         for (Map<?, ?> m : getMapList("parties")) {
             party = (String) m.get("name");
             tag   = (String) m.get("tag");
 
-            if ((party == null) || (tag == null))
-                continue;
-
-            parties.put(party, tag);
+            if ((party != null) && (tag != null))
+                parties.put(party, tag);
         }
 
         if (!file.exists())
@@ -97,14 +82,9 @@ public class Configuration extends YamlConfiguration
 
         ConfigurationSection cs;
 
-        cs = getConfigurationSection("logging");
-        cs.set("admin", adminLog);
-        cs.set("party", partyLog);
-
         cs = getConfigurationSection("tags");
-        cs.set("admin",   adminTag);
-        cs.set("default", defaultTag);
-        cs.set("party",   partyTag);
+        cs.set("admin", adminTag);
+        cs.set("party", partyTag);
 
         cparties = new ArrayList<Map<String, String>>();
 
