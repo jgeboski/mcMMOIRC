@@ -22,23 +22,19 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.ensifera.animosity.craftirc.EndPoint;
-import com.ensifera.animosity.craftirc.RelayedMessage;
 
 import org.jgeboski.mcmmoirc.command.CIRCReload;
 import org.jgeboski.mcmmoirc.point.AdminPoint;
 import org.jgeboski.mcmmoirc.point.GamePoint;
 import org.jgeboski.mcmmoirc.point.PartyPoint;
 import org.jgeboski.mcmmoirc.util.Log;
-import org.jgeboski.mcmmoirc.util.Message;
 
 public class mcMMOIRC extends JavaPlugin
 {
@@ -60,9 +56,9 @@ public class mcMMOIRC extends JavaPlugin
         config = new Configuration(new File(getDataFolder(), "config.yml"));
         events = new EventListener(this);
 
-        adminPoint   = new AdminPoint(this);
-        partyPoint   = new GamePoint(this);
-        partyPoints  = new HashMap<String, PartyPoint>();
+        adminPoint  = new AdminPoint(this);
+        partyPoint  = new GamePoint(this);
+        partyPoints = new HashMap<String, PartyPoint>();
     }
 
     public void onEnable()
@@ -70,9 +66,6 @@ public class mcMMOIRC extends JavaPlugin
         PluginCommand command;
         PluginManager pm;
         Plugin p;
-
-        config.load();
-        partyPoints.clear();
 
         pm = getServer().getPluginManager();
         p  = pm.getPlugin("CraftIRC");
@@ -85,12 +78,12 @@ public class mcMMOIRC extends JavaPlugin
 
         craftirc = (CraftIRC) p;
 
-        command   = getServer().getPluginCommand("ircreload");
-        ircrExec  = command.getExecutor();
-        command.setExecutor(new CIRCReload(this));
-
         reload();
         events.register();
+
+        command  = getServer().getPluginCommand("ircreload");
+        ircrExec = command.getExecutor();
+        command.setExecutor(new CIRCReload(this));
     }
 
     public void onDisable()
@@ -100,34 +93,31 @@ public class mcMMOIRC extends JavaPlugin
         craftirc.unregisterEndPoint(config.adminTag);
         craftirc.unregisterEndPoint(config.partyTag);
 
-        for (PartyPoint v : partyPoints.values())
-            craftirc.unregisterEndPoint(v.getTag());
+        for (PartyPoint pp : partyPoints.values())
+            craftirc.unregisterEndPoint(pp.party.tag);
     }
 
     public void reload()
     {
-        PartyPoint partyp;
-        String     party;
-        String     tag;
+        PartyPoint pp;
 
         craftirc.unregisterEndPoint(config.adminTag);
         craftirc.unregisterEndPoint(config.partyTag);
 
-        for (PartyPoint v : partyPoints.values())
-            craftirc.unregisterEndPoint(v.getTag());
+        for (PartyPoint pv : partyPoints.values())
+            craftirc.unregisterEndPoint(pv.party.tag);
 
+        partyPoints.clear();
         config.load();
 
         registerEndPoint(config.adminTag, adminPoint);
         registerEndPoint(config.partyTag, partyPoint);
 
-        for (Entry<String, String> e : config.parties.entrySet()) {
-            party  = e.getKey();
-            tag    = e.getValue();
-            partyp = new PartyPoint(this, tag, party);
+        for (Entry<String, Party> e : config.parties.entrySet()) {
+            pp = new PartyPoint(this, e.getValue());
 
-            if (registerEndPoint(tag, partyp))
-                partyPoints.put(party, partyp);
+            if (registerEndPoint(pp.party.tag, pp))
+                partyPoints.put(pp.party.name, pp);
         }
     }
 
@@ -138,52 +128,5 @@ public class mcMMOIRC extends JavaPlugin
 
         Log.severe("Unable to register CraftIRC tag: %s", tag);
         return false;
-    }
-
-    private RelayedMessage fillMessage(RelayedMessage rmsg, String sender,
-                                       String msg)
-    {
-        Player p;
-
-        p = getServer().getPlayerExact(sender);
-
-        if (p != null) {
-            rmsg.setField("realSender", p.getName());
-            rmsg.setField("sender",     p.getDisplayName());
-            rmsg.setField("world",      p.getWorld().getName());
-        } else {
-            rmsg.setField("sender",     sender);
-        }
-
-        rmsg.setField("message", msg);
-        return rmsg;
-    }
-
-    public void adminMessageToIRC(String sender, String event, String msg)
-    {
-        RelayedMessage rmsg;
-
-        rmsg = craftirc.newMsg(adminPoint, null, event);
-        rmsg = fillMessage(rmsg, sender, msg);
-
-        rmsg.post();
-    }
-
-    public void partyMessageToIRC(String sender, String event, String party,
-                                  String msg)
-    {
-        RelayedMessage rmsg;
-        GamePoint      gp;
-
-        gp = partyPoints.get(party);
-
-        if (gp == null)
-            gp = partyPoint;
-
-        rmsg = craftirc.newMsg(gp, null, event);
-        rmsg = fillMessage(rmsg, sender, msg);
-
-        rmsg.setField("srcParty", party);
-        rmsg.post();
     }
 }

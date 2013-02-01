@@ -23,8 +23,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import com.ensifera.animosity.craftirc.RelayedMessage;
+
 import com.gmail.nossr50.events.chat.McMMOAdminChatEvent;
 import com.gmail.nossr50.events.chat.McMMOPartyChatEvent;
+
+import org.jgeboski.mcmmoirc.point.GamePoint;
 
 public class EventListener implements Listener
 {
@@ -46,27 +50,47 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerChat(McMMOAdminChatEvent event)
     {
-        Plugin p;
+        RelayedMessage msg;
+        Plugin         p;
 
         p = event.getPlugin();
 
         if ((p != null) && (p instanceof mcMMOIRC))
             return;
 
-        mirc.adminMessageToIRC(event.getSender(), "chat", event.getMessage());
+        msg = mirc.craftirc.newMsg(mirc.adminPoint, null, "chat");
+
+        msg.setField("realSender", event.getSender());
+        msg.setField("sender",     event.getSender());
+        msg.setField("message",    event.getMessage());
+
+        msg.post();
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerChat(McMMOPartyChatEvent event)
     {
-        Plugin p;
+        RelayedMessage msg;
+        GamePoint      gp;
+        Plugin         p;
 
         p = event.getPlugin();
 
         if ((p != null) && (p instanceof mcMMOIRC))
             return;
 
-        mirc.partyMessageToIRC(event.getSender(), "chat", event.getParty(),
-                               event.getMessage());
+        gp = mirc.partyPoints.get(event.getParty());
+
+        if (gp == null)
+            gp = mirc.partyPoint;
+
+        msg = mirc.craftirc.newMsg(gp, null, "chat");
+
+        msg.setField("realSender", event.getSender());
+        msg.setField("sender",     event.getSender());
+        msg.setField("message",    event.getMessage());
+        msg.setField("srcParty",   event.getParty());
+
+        msg.post();
     }
 }

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -35,40 +36,69 @@ public class Configuration extends YamlConfiguration
     public String adminTag;
     public String partyTag;
 
-    public HashMap<String, String> parties;
+    public String adminPrefix;
+    public String adminSuffix;
+
+    public HashMap<String, Party> parties;
 
     public Configuration(File file)
     {
         this.file = file;
 
-        adminTag  = "adminchat";
-        partyTag  = "partychat";
+        adminTag = "adminchat";
+        partyTag = "partychat";
 
-        parties   = new HashMap<String, String>();
+        adminPrefix = null;
+        adminSuffix = null;
+
+        parties = new HashMap<String, Party>();
     }
 
     public void load()
     {
         ConfigurationSection cs;
-        String party;
+        String name;
         String tag;
+        String prefix;
+        String suffix;
 
         try {
             super.load(file);
         } catch (Exception e) {
             Log.warning("Unable to load: %s", file.toString());
+            e.printStackTrace();
         }
 
         cs       = getConfigurationSection("tags");
         adminTag = cs.getString("admin", adminTag);
         partyTag = cs.getString("party", partyTag);
 
-        for (Map<?, ?> m : getMapList("parties")) {
-            party = (String) m.get("name");
-            tag   = (String) m.get("tag");
+        cs          = getConfigurationSection("admin");
+        adminPrefix = cs.getString("prefix", adminPrefix);
+        adminSuffix = cs.getString("suffix", adminSuffix);
 
-            if ((party != null) && (tag != null))
-                parties.put(party, tag);
+        if (adminPrefix != null)
+            adminPrefix = ChatColor.translateAlternateColorCodes('&', adminPrefix);
+
+        if (adminSuffix != null)
+            adminSuffix = ChatColor.translateAlternateColorCodes('&', adminSuffix);
+
+        for (Map<?, ?> m : getMapList("parties")) {
+            name   = (String) m.get("name");
+            tag    = (String) m.get("tag");
+            prefix = (String) m.get("prefix");
+            suffix = (String) m.get("suffix");
+
+            if ((name == null) || (tag == null))
+                continue;
+
+            if (prefix != null)
+                prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+
+            if (suffix != null)
+                suffix = ChatColor.translateAlternateColorCodes('&', suffix);
+
+            parties.put(name, new Party(name, tag, prefix, suffix));
         }
 
         if (!file.exists())
@@ -77,26 +107,48 @@ public class Configuration extends YamlConfiguration
 
     public void save()
     {
-        ArrayList<Map<String, String>> cparties;
-        Map<String, String>            cparty;
+        ArrayList<Map<String, String>> cps;
+        Map<String, String>            cp;
 
         ConfigurationSection cs;
+        String s;
+        Party  p;
 
         cs = getConfigurationSection("tags");
         cs.set("admin", adminTag);
         cs.set("party", partyTag);
 
-        cparties = new ArrayList<Map<String, String>>();
+        cs = getConfigurationSection("admin");
 
-        for (Entry<String, String> e : parties.entrySet()) {
-            cparty = new HashMap<String, String>();
-            cparty.put("name", e.getKey());
-            cparty.put("tag",  e.getValue());
+        s = adminPrefix;
+        s = (s != null) ? s.replace(ChatColor.COLOR_CHAR, '&') : null;
+        cs.set("prefix", s);
 
-            cparties.add(cparty);
+        s = adminSuffix;
+        s = (s != null) ? s.replace(ChatColor.COLOR_CHAR, '&') : null;
+        cs.set("suffix", s);
+
+        cps = new ArrayList<Map<String, String>>();
+
+        for (Entry<String, Party> e : parties.entrySet()) {
+            cp = new HashMap<String, String>();
+            p  = e.getValue();
+
+            cp.put("name", p.name);
+            cp.put("tag",  p.tag);
+
+            s = p.prefix;
+            s = (s != null) ? s.replace(ChatColor.COLOR_CHAR, '&') : null;
+            cp.put("prefix", s);
+
+            s = p.suffix;
+            s = (s != null) ? s.replace(ChatColor.COLOR_CHAR, '&') : null;
+            cp.put("suffix", s);
+
+            cps.add(cp);
         }
 
-        set("parties", cparties);
+        set("parties", cps);
 
         try {
             super.save(file);

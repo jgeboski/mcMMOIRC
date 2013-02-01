@@ -18,35 +18,34 @@
 package org.jgeboski.mcmmoirc.point;
 
 import com.ensifera.animosity.craftirc.RelayedMessage;
+
 import com.gmail.nossr50.api.ChatAPI;
+
 import org.jgeboski.mcmmoirc.mcMMOIRC;
+import org.jgeboski.mcmmoirc.Party;
 
 public class PartyPoint extends GamePoint
 {
-    private String tag;
-    private String party;
+    public Party party;
 
-    public PartyPoint(mcMMOIRC mirc, String tag, String party)
+    public PartyPoint(mcMMOIRC mirc, Party party)
     {
         super(mirc);
-
-        this.tag   = tag;
         this.party = party;
-    }
-
-    public String getTag()
-    {
-        return tag;
-    }
-
-    public String getParty()
-    {
-        return party;
     }
 
     public void messageIn(RelayedMessage msg)
     {
-        ChatAPI.sendPartyChat(mirc, msg.getField("sender"), party,
-                              msg.getField("message"));
+        String s;
+
+        s = msg.getField("sender");
+
+        if (party.prefix != null)
+            s = party.prefix + s;
+
+        if (party.suffix != null)
+            s += party.suffix;
+
+        ChatAPI.sendPartyChat(mirc, s, party.name, msg.getField("message"));
     }
 }

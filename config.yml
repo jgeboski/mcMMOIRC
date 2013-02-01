@@ -10,12 +10,19 @@
 # Declares the tags to be used in CraftIRC's configuration
 tags:
   # The tag that represents the Admin Chat
-  admin: adminchat
+  admin: 'adminchat'
 
   # Default tag for parties
-  party: partychat
+  party: 'partychat'
+
+# The prefix and suffix for admin chat
+admin:
+  prefix: '&3'
+  suffix: '&r'
 
 # A list of parties to relay to CraftIRC
 parties:
-  - name: test
-    tag: testparty
+  - name: 'test'
+    tag: 'testparty'
+    prefix: '&3'
+    suffix: '&r'
