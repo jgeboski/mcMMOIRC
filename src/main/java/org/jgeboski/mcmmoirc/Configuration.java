@@ -34,7 +34,6 @@ public class Configuration extends YamlConfiguration
     private File file;
 
     public String adminTag;
-    public String partyTag;
 
     public String adminPrefix;
     public String adminSuffix;
@@ -46,7 +45,6 @@ public class Configuration extends YamlConfiguration
         this.file = file;
 
         adminTag = "adminchat";
-        partyTag = "partychat";
 
         adminPrefix = null;
         adminSuffix = null;
@@ -69,11 +67,8 @@ public class Configuration extends YamlConfiguration
             e.printStackTrace();
         }
 
-        cs       = getConfigurationSection("tags");
-        adminTag = cs.getString("admin", adminTag);
-        partyTag = cs.getString("party", partyTag);
-
         cs          = getConfigurationSection("admin");
+        adminTag    = cs.getString("tag",    null);
         adminPrefix = cs.getString("prefix", adminPrefix);
         adminSuffix = cs.getString("suffix", adminSuffix);
 
@@ -101,8 +96,26 @@ public class Configuration extends YamlConfiguration
             parties.put(name, new Party(name, tag, prefix, suffix));
         }
 
-        if (!file.exists())
+        if (!file.exists()) {
             save();
+            return;
+        }
+
+
+        /* Backwards compatibility for configuration values */
+
+        if (adminTag != null)
+            return;
+
+        adminTag = getString("tags.admin", adminTag);
+
+        if (adminTag == null) {
+            adminTag = "adminchat";
+            return;
+        }
+
+        set("tags", null);
+        save();
     }
 
     public void save()
@@ -114,11 +127,8 @@ public class Configuration extends YamlConfiguration
         String s;
         Party  p;
 
-        cs = getConfigurationSection("tags");
-        cs.set("admin", adminTag);
-        cs.set("party", partyTag);
-
         cs = getConfigurationSection("admin");
+        cs.set("tag", adminTag);
 
         s = adminPrefix;
         s = (s != null) ? s.replace(ChatColor.COLOR_CHAR, '&') : null;

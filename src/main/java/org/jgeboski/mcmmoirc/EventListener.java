@@ -23,12 +23,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
+import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
 import com.gmail.nossr50.events.chat.McMMOAdminChatEvent;
 import com.gmail.nossr50.events.chat.McMMOPartyChatEvent;
 
-import org.jgeboski.mcmmoirc.point.GamePoint;
+import org.jgeboski.mcmmoirc.point.PartyPoint;
 
 public class EventListener implements Listener
 {
@@ -71,7 +72,8 @@ public class EventListener implements Listener
     public void onPlayerChat(McMMOPartyChatEvent event)
     {
         RelayedMessage msg;
-        GamePoint      gp;
+        EndPoint       ep;
+        Party          pt;
         Plugin         p;
 
         p = event.getPlugin();
@@ -79,17 +81,18 @@ public class EventListener implements Listener
         if ((p != null) && (p instanceof mcMMOIRC))
             return;
 
-        gp = mirc.partyPoints.get(event.getParty());
+        pt = mirc.config.parties.get(event.getParty());
+        ep = mirc.craftirc.getEndPoint(pt.tag);
 
-        if (gp == null)
-            gp = mirc.partyPoint;
+        if (ep == null)
+            return;
 
-        msg = mirc.craftirc.newMsg(gp, null, "chat");
+        msg = mirc.craftirc.newMsg(ep, null, "chat");
 
         msg.setField("realSender", event.getSender());
         msg.setField("sender",     event.getSender());
         msg.setField("message",    event.getMessage());
-        msg.setField("srcParty",   event.getParty());
+        msg.setField("srcParty",   pt.name);
 
         msg.post();
     }

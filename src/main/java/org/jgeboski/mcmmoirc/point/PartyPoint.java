@@ -17,35 +17,49 @@
 
 package org.jgeboski.mcmmoirc.point;
 
+import java.util.ArrayList;
+
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
 import com.gmail.nossr50.api.ChatAPI;
+import com.gmail.nossr50.party.PartyManager;
 
 import org.jgeboski.mcmmoirc.mcMMOIRC;
 import org.jgeboski.mcmmoirc.Party;
 
 public class PartyPoint extends GamePoint
 {
-    public Party party;
+    public ArrayList<Party> parties;
 
-    public PartyPoint(mcMMOIRC mirc, Party party)
+    public PartyPoint(mcMMOIRC mirc)
     {
         super(mirc);
-        this.party = party;
+        this.parties = new ArrayList<Party>();
     }
 
     public void messageIn(RelayedMessage msg)
     {
+        String ps;
         String s;
+        String m;
 
         s = msg.getField("sender");
+        m = msg.getField("message");
 
-        if (party.prefix != null)
-            s = party.prefix + s;
+        for (Party p : parties) {
+            /* ChatAPI does not check party name validity */
+            if (!PartyManager.isParty(p.name))
+                continue;
 
-        if (party.suffix != null)
-            s += party.suffix;
+            if (p.prefix != null)
+                ps = p.prefix + s;
+            else
+                ps = s;
 
-        ChatAPI.sendPartyChat(mirc, s, party.name, msg.getField("message"));
+            if (p.suffix != null)
+                ps += p.suffix;
+
+            ChatAPI.sendPartyChat(mirc, ps, p.name, m);
+        }
     }
 }

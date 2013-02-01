@@ -28,7 +28,7 @@ public class GamePoint implements EndPoint
 {
     protected mcMMOIRC mirc;
 
-    public GamePoint(mcMMOIRC mirc)
+    protected GamePoint(mcMMOIRC mirc)
     {
         this.mirc = mirc;
     }
