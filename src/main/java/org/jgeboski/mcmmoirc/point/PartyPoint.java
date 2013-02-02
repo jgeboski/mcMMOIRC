@@ -39,9 +39,9 @@ public class PartyPoint extends GamePoint
 
     public void messageIn(RelayedMessage msg)
     {
-        String ps;
         String s;
         String m;
+        String d;
 
         s = msg.getField("sender");
         m = msg.getField("message");
@@ -52,14 +52,14 @@ public class PartyPoint extends GamePoint
                 continue;
 
             if (p.prefix != null)
-                ps = p.prefix + s;
+                d = p.prefix + s;
             else
-                ps = s;
+                d = s;
 
             if (p.suffix != null)
-                ps += p.suffix;
+                d += p.suffix;
 
-            ChatAPI.sendPartyChat(mirc, ps, p.name, m);
+            ChatAPI.sendPartyChat(mirc, s, d, p.name, m);
         }
     }
 }

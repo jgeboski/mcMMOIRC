@@ -31,15 +31,18 @@ public class AdminPoint extends GamePoint
     public void messageIn(RelayedMessage msg)
     {
         String s;
+        String d;
 
         s = msg.getField("sender");
 
         if (mirc.config.adminPrefix != null)
-            s = mirc.config.adminPrefix + s;
+            d = mirc.config.adminPrefix + s;
+        else
+            d = s;
 
         if (mirc.config.adminSuffix != null)
-            s += mirc.config.adminSuffix;
+            d += mirc.config.adminSuffix;
 
-        ChatAPI.sendAdminChat(mirc, s, msg.getField("message"));
+        ChatAPI.sendAdminChat(mirc, s, d, msg.getField("message"));
     }
 }

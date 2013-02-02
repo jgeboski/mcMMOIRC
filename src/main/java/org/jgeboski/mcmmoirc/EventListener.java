@@ -62,7 +62,7 @@ public class EventListener implements Listener
         msg = mirc.craftirc.newMsg(mirc.adminPoint, null, "chat");
 
         msg.setField("realSender", event.getSender());
-        msg.setField("sender",     event.getSender());
+        msg.setField("sender",     event.getDisplayName());
         msg.setField("message",    event.getMessage());
 
         msg.post();
@@ -90,7 +90,7 @@ public class EventListener implements Listener
         msg = mirc.craftirc.newMsg(ep, null, "chat");
 
         msg.setField("realSender", event.getSender());
-        msg.setField("sender",     event.getSender());
+        msg.setField("sender",     event.getDisplayName());
         msg.setField("message",    event.getMessage());
         msg.setField("srcParty",   pt.name);
 
