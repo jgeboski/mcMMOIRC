@@ -125,4 +125,16 @@ public class mcMMOIRC extends JavaPlugin
             Log.severe("Unable to register CraftIRC tag: %s", p.tag);
         }
     }
+
+    public PartyPoint getPartyPoint(String party)
+    {
+        Party p;
+
+        p = config.parties.get(party);
+
+        if (p == null)
+            return null;
+
+        return (PartyPoint) craftirc.getEndPoint(p.tag);
+    }
 }

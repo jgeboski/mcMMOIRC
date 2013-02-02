@@ -24,7 +24,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import com.ensifera.animosity.craftirc.EndPoint;
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
 import com.gmail.nossr50.events.chat.McMMOAdminChatEvent;
@@ -74,8 +73,7 @@ public class EventListener implements Listener
     public void onPlayerChat(McMMOPartyChatEvent event)
     {
         RelayedMessage msg;
-        EndPoint       ep;
-        Party          pt;
+        PartyPoint     pp;
         Plugin         p;
 
         p = event.getPlugin();
@@ -83,18 +81,17 @@ public class EventListener implements Listener
         if ((p != null) && (p instanceof mcMMOIRC))
             return;
 
-        pt = mirc.config.parties.get(event.getParty());
-        ep = mirc.craftirc.getEndPoint(pt.tag);
+        pp = mirc.getPartyPoint(event.getParty());
 
-        if (ep == null)
+        if (pp == null)
             return;
 
-        msg = mirc.craftirc.newMsg(ep, null, "chat");
+        msg = mirc.craftirc.newMsg(pp, null, "chat");
 
         msg.setField("realSender", event.getSender());
         msg.setField("sender",     event.getDisplayName());
         msg.setField("message",    event.getMessage());
-        msg.setField("srcParty",   pt.name);
+        msg.setField("srcParty",   event.getParty());
 
         msg.post();
     }
@@ -132,20 +129,18 @@ public class EventListener implements Listener
     private void partyChange(String type, String party, Player player)
     {
         RelayedMessage msg;
-        EndPoint       ep;
-        Party          pt;
+        PartyPoint     pp;
 
-        pt = mirc.config.parties.get(party);
-        ep = mirc.craftirc.getEndPoint(pt.tag);
+        pp = mirc.getPartyPoint(party);
 
-        if (ep == null)
+        if (pp == null)
             return;
 
-        msg = mirc.craftirc.newMsg(ep, null, type);
+        msg = mirc.craftirc.newMsg(pp, null, type);
 
         msg.setField("realSender", player.getName());
         msg.setField("sender",     player.getDisplayName());
-        msg.setField("srcParty",   pt.name);
+        msg.setField("srcParty",   party);
 
         msg.post();
     }
