@@ -66,6 +66,7 @@ public class EventListener implements Listener
         msg.setField("sender",     event.getDisplayName());
         msg.setField("message",    event.getMessage());
 
+        mirc.registerEndPoint(mirc.config.adminTag, mirc.adminPoint);
         msg.post();
     }
 
@@ -74,11 +75,11 @@ public class EventListener implements Listener
     {
         RelayedMessage msg;
         PartyPoint     pp;
-        Plugin         p;
+        Plugin         pl;
 
-        p = event.getPlugin();
+        pl = event.getPlugin();
 
-        if ((p != null) && (p instanceof mcMMOIRC))
+        if ((pl != null) && (pl instanceof mcMMOIRC))
             return;
 
         pp = mirc.getPartyPoint(event.getParty());
@@ -93,6 +94,7 @@ public class EventListener implements Listener
         msg.setField("message",    event.getMessage());
         msg.setField("srcParty",   event.getParty());
 
+        mirc.registerEndPoint(pp);
         msg.post();
     }
 
@@ -142,6 +144,7 @@ public class EventListener implements Listener
         msg.setField("sender",     player.getDisplayName());
         msg.setField("srcParty",   party);
 
+        mirc.registerEndPoint(pp);
         msg.post();
     }
 }

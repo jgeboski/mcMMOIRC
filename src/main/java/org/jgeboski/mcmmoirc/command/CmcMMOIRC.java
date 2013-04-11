@@ -25,11 +25,11 @@ import org.jgeboski.mcmmoirc.mcMMOIRC;
 import org.jgeboski.mcmmoirc.util.Message;
 import org.jgeboski.mcmmoirc.util.Utils;
 
-public class CIRCReload implements CommandExecutor
+public class CmcMMOIRC implements CommandExecutor
 {
     protected mcMMOIRC mirc;
 
-    public CIRCReload(mcMMOIRC mirc)
+    public CmcMMOIRC(mcMMOIRC mirc)
     {
         this.mirc = mirc;
     }
@@ -37,17 +37,32 @@ public class CIRCReload implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command,
                              String label, String[] args)
     {
-        String cmd;
+        String c;
 
-        if (!Utils.hasPermission(sender, "craftirc.ircreload"))
+        if (!Utils.hasPermission(sender, "mcmmoirc.manage"))
             return true;
 
-        mirc.ircrExec.onCommand(sender, command, label, args);
-        mirc.reload();
+        if (args.length < 1) {
+            Message.info(sender, command.getUsage());
+            return true;
+        }
 
-        Message.info(sender, "Successfully reloaded %s",
-                     mirc.getDescription().getFullName());
+        c = args[0].toLowerCase();
+
+        if (c.matches("r|rel|reload"))
+            reload(sender);
+        else
+            Message.info(sender, command.getUsage());
 
         return true;
+    }
+
+    private void reload(CommandSender sender)
+    {
+        if (!Utils.hasPermission(sender, "mcmmoirc.reload"))
+            return;
+
+        mirc.reload();
+        Message.info(sender, "Configuration reloaded.");
     }
 }

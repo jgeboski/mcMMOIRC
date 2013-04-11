@@ -4,3 +4,19 @@ description: Integrate the mcMMO chat system with CraftIRC
 author: jgeboski
 main: org.jgeboski.mcmmoirc.mcMMOIRC
 depend: ['CraftIRC', 'mcMMO']
+
+commands:
+  mcmmoirc:
+    description: Manage mcMMOIRC
+    aliases: ['mirc']
+    usage: /<command> reload
+
+permissions:
+  mcmmoirc.manage:
+    description: Access the mcmmoirc command
+    default: op
+  mcmmoirc.reload:
+    description: Reload the configuration
+    default: op
+    children:
+      mcmmoirc.manage: true

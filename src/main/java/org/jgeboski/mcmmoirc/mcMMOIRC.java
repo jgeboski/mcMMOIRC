@@ -20,8 +20,6 @@ package org.jgeboski.mcmmoirc;
 import java.io.File;
 import java.util.Map.Entry;
 
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -29,7 +27,7 @@ import org.bukkit.plugin.PluginManager;
 import com.ensifera.animosity.craftirc.CraftIRC;
 import com.ensifera.animosity.craftirc.EndPoint;
 
-import org.jgeboski.mcmmoirc.command.CIRCReload;
+import org.jgeboski.mcmmoirc.command.CmcMMOIRC;
 import org.jgeboski.mcmmoirc.point.AdminPoint;
 import org.jgeboski.mcmmoirc.point.PartyPoint;
 import org.jgeboski.mcmmoirc.util.Log;
@@ -37,10 +35,9 @@ import org.jgeboski.mcmmoirc.util.Message;
 
 public class mcMMOIRC extends JavaPlugin
 {
-    public Configuration   config;
-    public AdminPoint      adminPoint;
-    public CraftIRC        craftirc;
-    public CommandExecutor ircrExec;
+    public Configuration config;
+    public AdminPoint    adminPoint;
+    public CraftIRC      craftirc;
 
     private EventListener events;
 
@@ -54,7 +51,6 @@ public class mcMMOIRC extends JavaPlugin
 
     public void onEnable()
     {
-        PluginCommand command;
         PluginManager pm;
         Plugin        p;
 
@@ -75,22 +71,15 @@ public class mcMMOIRC extends JavaPlugin
         reload();
         events.register();
 
-        command  = getServer().getPluginCommand("ircreload");
-        ircrExec = command.getExecutor();
-        command.setExecutor(new CIRCReload(this));
+        getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
     }
 
     public void onDisable()
     {
-        Party p;
-
-        getServer().getPluginCommand("ircreload").setExecutor(ircrExec);
         craftirc.unregisterEndPoint(config.adminTag);
 
-        for (Entry<String, Party> e : config.parties.entrySet()) {
-            p = e.getValue();
-            craftirc.unregisterEndPoint(p.tag);
-        }
+        for (Entry<String, Party> e : config.parties.entrySet())
+            craftirc.unregisterEndPoint(e.getValue().tag);
     }
 
     public void reload()
@@ -98,13 +87,10 @@ public class mcMMOIRC extends JavaPlugin
         PartyPoint pp;
         Party      p;
 
+        for (Entry<String, Party> e : config.parties.entrySet())
+            craftirc.unregisterEndPoint(e.getValue().tag);
+
         craftirc.unregisterEndPoint(config.adminTag);
-
-        for (Entry<String, Party> e : config.parties.entrySet()) {
-            p = e.getValue();
-            craftirc.unregisterEndPoint(p.tag);
-        }
-
         config.load();
         craftirc.registerEndPoint(config.adminTag, adminPoint);
 
@@ -112,20 +98,34 @@ public class mcMMOIRC extends JavaPlugin
             p  = e.getValue();
             pp = (PartyPoint) craftirc.getEndPoint(p.tag);
 
-            if (pp != null) {
+            if (pp == null)
+                pp = new PartyPoint(this);
+
+            if (registerEndPoint(p.tag, pp))
                 pp.parties.add(p);
-                continue;
-            }
-
-            pp = new PartyPoint(this);
-
-            if (craftirc.registerEndPoint(p.tag, pp)) {
-                pp.parties.add(p);
-                continue;
-            }
-
-            Log.severe("Unable to register CraftIRC tag: %s", p.tag);
         }
+    }
+
+    public boolean registerEndPoint(String tag, Object ep)
+    {
+        if (craftirc == null)
+            return false;
+
+        /* Prevent CraftIRC from dispatching an error message */
+        if (craftirc.getEndPoint(tag) != null)
+            return true;
+
+        if (craftirc.registerEndPoint(tag, (EndPoint) ep))
+            return true;
+
+        Log.severe("Failed to register CraftIRC tag: %s", tag);
+        return false;
+    }
+
+    public void registerEndPoint(PartyPoint pp)
+    {
+        for (Party p : pp.parties)
+            registerEndPoint(p.tag, pp);
     }
 
     public PartyPoint getPartyPoint(String party)
