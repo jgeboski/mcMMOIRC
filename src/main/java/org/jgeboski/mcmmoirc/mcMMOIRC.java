@@ -33,11 +33,10 @@ import org.jgeboski.mcmmoirc.command.CIRCReload;
 import org.jgeboski.mcmmoirc.point.AdminPoint;
 import org.jgeboski.mcmmoirc.point.PartyPoint;
 import org.jgeboski.mcmmoirc.util.Log;
+import org.jgeboski.mcmmoirc.util.Message;
 
 public class mcMMOIRC extends JavaPlugin
 {
-    public static String pluginName = "mcMMOIRC";
-
     public Configuration   config;
     public AdminPoint      adminPoint;
     public CraftIRC        craftirc;
@@ -58,6 +57,9 @@ public class mcMMOIRC extends JavaPlugin
         PluginCommand command;
         PluginManager pm;
         Plugin        p;
+
+        Log.init(getLogger());
+        Message.init(getDescription().getName());
 
         pm = getServer().getPluginManager();
         p  = pm.getPlugin("CraftIRC");

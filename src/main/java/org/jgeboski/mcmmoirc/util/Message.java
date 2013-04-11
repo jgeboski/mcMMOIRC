@@ -21,79 +21,82 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import org.jgeboski.mcmmoirc.mcMMOIRC;
-
 public class Message
 {
-    /**
-     * Send an INFO message to a CommandSender.  This method is the
-     * same as calling Message.toSender() but, let's keep the INFO,
-     * WARNING, SEVERE standard.
-     *
-     * @param sender  the CommandSender
-     * @param format  A format string
-     * @param args    Arguments corresponding to @param format
-     **/
-    public static void info(CommandSender sender, String format, Object ... args)
+    public static String plugin;
+
+    public static void init(String plugin)
     {
-        toSender(sender, format, args);
+        Message.plugin = plugin;
     }
 
-    /**
-     * Send an WARNING message to a CommandSender.  If the CommandSender
-     * is a player, the message is highlighted yellow.  If the
-     * CommandSender is not a Player, this is same as Message.toSender()
-     *
-     * @param sender  the CommandSender
-     * @param format  A format string
-     * @param args    Arguments corresponding to @param format
-     **/
-    public static void warning(CommandSender sender, String format, Object ... args)
+    public static String format(String format, Object ... args)
+    {
+        String str;
+        String rc;
+        String rcr;
+
+        str = String.format(format, args);
+
+        if (str.charAt(0) != ChatColor.COLOR_CHAR)
+            str = ChatColor.GOLD + str;
+
+        rc  = ChatColor.RESET.toString();
+        rcr = rc + str.substring(0, 2);
+        str = str.replaceAll(rc, rcr);
+
+        return str;
+    }
+
+    public static String hl(Object obj)
+    {
+        String str;
+
+        str = String.valueOf(obj);
+        str = ChatColor.GRAY + str + ChatColor.RESET;
+
+        return str;
+    }
+
+    public static void info(CommandSender sender, String format,
+                            Object ... args)
+    {
+        send(sender, format, args);
+    }
+
+    public static void warning(CommandSender sender, String format,
+                               Object ... args)
     {
         if (sender instanceof Player)
             format = ChatColor.YELLOW + format;
 
-        toSender(sender, format, args);
+        send(sender, format, args);
     }
 
-    /**
-     * Send a SEVERE message to a CommandSender.  If the CommandSender
-     * is a player, the message is highlighted in red.  If the
-     * CommandSender is not a Player, this is same as Message.toSender()
-     *
-     * @param sender  the CommandSender
-     * @param format  A format string
-     * @param args    Arguments corresponding to @param format
-     **/
-    public static void severe(CommandSender sender, String format, Object ... args)
+    public static void severe(CommandSender sender, String format,
+                              Object ... args)
     {
         if (sender instanceof Player)
             format = ChatColor.RED + format;
 
-        toSender(sender, format, args);
+        send(sender, format, args);
     }
 
-    /**
-     * Send a message to a CommandSender with the plugin name prefixed.
-     * If the CommandSender is not a Player, any ChatColors in the
-     * message will be stripped.
-     *
-     * @param sende:  the CommandSender
-     * @param format  A format string
-     * @param args    Arguments corresponding to @param format
-     **/
-    public static void toSender(CommandSender sender, String format, Object ... args)
+    public static void send(CommandSender sender, String format,
+                            Object ... args)
     {
-        String msg = String.format(format, args);
+        String str;
+
+        str = format(format, args);
 
         if (sender instanceof Player) {
-            msg = String.format("%s[%s]%s %s", ChatColor.DARK_AQUA,
-                mcMMOIRC.pluginName, ChatColor.WHITE, msg);
+            str = String.format("%s%s%s%s %s", hl("["), ChatColor.DARK_AQUA,
+                                plugin, hl("]"), str);
         } else {
-            msg = String.format("[%s] %s ", mcMMOIRC.pluginName, msg);
-            msg = ChatColor.stripColor(msg);
+            str = ChatColor.stripColor(str);
+            str = String.format("[%s] %s", plugin, str);
         }
 
-        sender.sendMessage(msg);
+        sender.sendMessage(str);
     }
 }
