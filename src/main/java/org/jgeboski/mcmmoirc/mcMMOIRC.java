@@ -53,6 +53,8 @@ public class mcMMOIRC extends JavaPlugin
     {
         PluginManager pm;
         Plugin        p;
+        PartyPoint    pp;
+        Party         pt;
 
         Log.init(getLogger());
         Message.init(getDescription().getName());
@@ -67,43 +69,40 @@ public class mcMMOIRC extends JavaPlugin
         }
 
         craftirc = (CraftIRC) p;
+        config.load();
+        craftirc.registerEndPoint(config.adminTag, adminPoint);
 
-        reload();
+        for (Entry<String, Party> e : config.parties.entrySet()) {
+            pt  = e.getValue();
+            pp = (PartyPoint) craftirc.getEndPoint(pt.tag);
+
+            if (pp == null)
+                pp = new PartyPoint(this);
+
+            if (registerEndPoint(pt.tag, pp))
+                pp.parties.add(pt);
+        }
+
         events.register();
-
         getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
     }
 
     public void onDisable()
     {
-        craftirc.unregisterEndPoint(config.adminTag);
-
         for (Entry<String, Party> e : config.parties.entrySet())
             craftirc.unregisterEndPoint(e.getValue().tag);
+
+        craftirc.unregisterEndPoint(config.adminTag);
     }
 
     public void reload()
     {
-        PartyPoint pp;
-        Party      p;
+        PluginManager pm;
 
-        for (Entry<String, Party> e : config.parties.entrySet())
-            craftirc.unregisterEndPoint(e.getValue().tag);
+        pm = getServer().getPluginManager();
 
-        craftirc.unregisterEndPoint(config.adminTag);
-        config.load();
-        craftirc.registerEndPoint(config.adminTag, adminPoint);
-
-        for (Entry<String, Party> e : config.parties.entrySet()) {
-            p  = e.getValue();
-            pp = (PartyPoint) craftirc.getEndPoint(p.tag);
-
-            if (pp == null)
-                pp = new PartyPoint(this);
-
-            if (registerEndPoint(p.tag, pp))
-                pp.parties.add(p);
-        }
+        pm.disablePlugin(this);
+        pm.enablePlugin(this);
     }
 
     public boolean registerEndPoint(String tag, Object ep)

@@ -63,6 +63,6 @@ public class CmcMMOIRC implements CommandExecutor
             return;
 
         mirc.reload();
-        Message.info(sender, "Configuration reloaded.");
+        Message.info(sender, "Plugin successfully reloaded");
     }
 }
