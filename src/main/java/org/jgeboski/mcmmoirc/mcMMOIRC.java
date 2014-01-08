@@ -28,6 +28,7 @@ import com.ensifera.animosity.craftirc.CraftIRC;
 import com.ensifera.animosity.craftirc.EndPoint;
 
 import org.jgeboski.mcmmoirc.command.CmcMMOIRC;
+import org.jgeboski.mcmmoirc.listener.mcMMOListener;
 import org.jgeboski.mcmmoirc.point.AdminPoint;
 import org.jgeboski.mcmmoirc.point.PartyPoint;
 import org.jgeboski.mcmmoirc.util.Log;
@@ -39,13 +40,9 @@ public class mcMMOIRC extends JavaPlugin
     public AdminPoint    adminPoint;
     public CraftIRC      craftirc;
 
-    private EventListener events;
-
     public void onLoad()
     {
-        config = new Configuration(new File(getDataFolder(), "config.yml"));
-        events = new EventListener(this);
-
+        config     = new Configuration(new File(getDataFolder(), "config.yml"));
         adminPoint = new AdminPoint(this);
     }
 
@@ -83,7 +80,7 @@ public class mcMMOIRC extends JavaPlugin
                 pp.parties.add(pt);
         }
 
-        events.register();
+        pm.registerEvents(new mcMMOListener(this), this);
         getCommand("mcmmoirc").setExecutor(new CmcMMOIRC(this));
     }
 

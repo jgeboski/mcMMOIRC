@@ -15,14 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jgeboski.mcmmoirc;
+package org.jgeboski.mcmmoirc.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 import com.ensifera.animosity.craftirc.RelayedMessage;
 
@@ -30,23 +29,16 @@ import com.gmail.nossr50.events.chat.McMMOAdminChatEvent;
 import com.gmail.nossr50.events.chat.McMMOPartyChatEvent;
 import com.gmail.nossr50.events.party.McMMOPartyChangeEvent;
 
+import org.jgeboski.mcmmoirc.mcMMOIRC;
 import org.jgeboski.mcmmoirc.point.PartyPoint;
 
-public class EventListener implements Listener
+public class mcMMOListener implements Listener
 {
     public mcMMOIRC mirc;
 
-    public EventListener(mcMMOIRC mirc)
+    public mcMMOListener(mcMMOIRC mirc)
     {
         this.mirc = mirc;
-    }
-
-    public void register()
-    {
-        PluginManager pm;
-
-        pm = mirc.getServer().getPluginManager();
-        pm.registerEvents(this, mirc);
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
