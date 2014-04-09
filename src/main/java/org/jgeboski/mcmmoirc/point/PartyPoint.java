@@ -48,7 +48,7 @@ public class PartyPoint extends GamePoint
 
         for (Party p : parties) {
             /* ChatAPI does not check party name validity */
-            if (!PartyManager.isParty(p.name))
+            if (PartyManager.getParty(p.name) == null)
                 continue;
 
             if (p.prefix != null)
