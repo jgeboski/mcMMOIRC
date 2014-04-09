@@ -54,8 +54,12 @@
             <url>http://repo.bukkit.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>libnull-repo</id>
-            <url>http://repo.libnull.so/</url>
+            <id>kitteh-repo</id>
+            <url>http://repo.kitteh.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>md_5-repo</id>
+            <url>http://repo.md-5.net/content/groups/public/</url>
         </repository>
     </repositories>
 
